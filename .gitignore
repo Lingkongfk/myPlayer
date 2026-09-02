@@ -1,0 +1,44 @@
+   # 编译输出目录
+   build-*/
+   debug/
+   release/
+   build/
+   out/
+   CMakeFiles/
+   CMakeCache.txt
+
+   # 编译生成的目标文件
+   *.o
+   *.obj
+   *.exe
+   *.dll
+   *.lib
+   *.a
+   *.so
+   *.dylib
+   Makefile*
+
+   # Qt 自动生成的 moc / qrc / ui 文件
+   moc_*.cpp
+   qrc_*.cpp
+   ui_*.h
+
+   # Qt Creator / qmake 本地配置
+   *.pro.user
+   *.pro.user.*
+   *.qbs.user
+   *.qmlproject.user
+   *.autosave
+   compile_commands.json
+   /.qmake.cache
+   /.qmake.stash
+
+   # 系统与编辑器垃圾文件
+   Thumbs.db
+   .DS_Store
+   *.log
+   *.tmp
+   *.bak
+   .vscode/
+   .idea/
+   
