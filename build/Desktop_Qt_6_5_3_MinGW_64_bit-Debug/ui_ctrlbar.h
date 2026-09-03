@@ -51,13 +51,18 @@ public:
     {
         if (CtrlBar->objectName().isEmpty())
             CtrlBar->setObjectName("CtrlBar");
-        CtrlBar->resize(552, 130);
+        CtrlBar->resize(510, 80);
+        CtrlBar->setMaximumSize(QSize(16777215, 80));
         verticalLayout = new QVBoxLayout(CtrlBar);
+        verticalLayout->setSpacing(0);
         verticalLayout->setObjectName("verticalLayout");
+        verticalLayout->setContentsMargins(8, 0, 0, 0);
         widget = new QWidget(CtrlBar);
         widget->setObjectName("widget");
         horizontalLayout_2 = new QHBoxLayout(widget);
+        horizontalLayout_2->setSpacing(0);
         horizontalLayout_2->setObjectName("horizontalLayout_2");
+        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         playSlider = new QSlider(widget);
         playSlider->setObjectName("playSlider");
         playSlider->setOrientation(Qt::Horizontal);
@@ -66,21 +71,23 @@ public:
 
         widget_2 = new QWidget(widget);
         widget_2->setObjectName("widget_2");
-        widget_2->setMinimumSize(QSize(120, 40));
+        widget_2->setMinimumSize(QSize(0, 0));
         widget_2->setMaximumSize(QSize(120, 40));
         horizontalLayout = new QHBoxLayout(widget_2);
+        horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName("horizontalLayout");
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
         volumeBtn = new QPushButton(widget_2);
         volumeBtn->setObjectName("volumeBtn");
-        volumeBtn->setMinimumSize(QSize(30, 30));
-        volumeBtn->setMaximumSize(QSize(30, 30));
+        volumeBtn->setMinimumSize(QSize(20, 20));
+        volumeBtn->setMaximumSize(QSize(20, 20));
 
         horizontalLayout->addWidget(volumeBtn);
 
         volumeSlider = new QSlider(widget_2);
         volumeSlider->setObjectName("volumeSlider");
-        volumeSlider->setMinimumSize(QSize(80, 25));
-        volumeSlider->setMaximumSize(QSize(80, 25));
+        volumeSlider->setMinimumSize(QSize(60, 0));
+        volumeSlider->setMaximumSize(QSize(80, 20));
         volumeSlider->setOrientation(Qt::Horizontal);
 
         horizontalLayout->addWidget(volumeSlider);
@@ -96,37 +103,42 @@ public:
         gridLayout->setObjectName("gridLayout");
         playOrPauseBtn = new QPushButton(CtrlBar);
         playOrPauseBtn->setObjectName("playOrPauseBtn");
-        playOrPauseBtn->setMinimumSize(QSize(0, 0));
+        playOrPauseBtn->setMinimumSize(QSize(30, 30));
         playOrPauseBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(playOrPauseBtn, 0, 0, 1, 1);
 
         backwardBtn = new QPushButton(CtrlBar);
         backwardBtn->setObjectName("backwardBtn");
+        backwardBtn->setMinimumSize(QSize(30, 30));
         backwardBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(backwardBtn, 0, 3, 1, 1);
 
         playListBtn = new QPushButton(CtrlBar);
         playListBtn->setObjectName("playListBtn");
+        playListBtn->setMinimumSize(QSize(30, 30));
         playListBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(playListBtn, 0, 9, 1, 1);
 
         forwardBtn = new QPushButton(CtrlBar);
         forwardBtn->setObjectName("forwardBtn");
+        forwardBtn->setMinimumSize(QSize(30, 30));
         forwardBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(forwardBtn, 0, 2, 1, 1);
 
         stopBtn = new QPushButton(CtrlBar);
         stopBtn->setObjectName("stopBtn");
+        stopBtn->setMinimumSize(QSize(30, 30));
         stopBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(stopBtn, 0, 1, 1, 1);
 
         settingBtn = new QPushButton(CtrlBar);
         settingBtn->setObjectName("settingBtn");
+        settingBtn->setMinimumSize(QSize(30, 30));
         settingBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(settingBtn, 0, 10, 1, 1);
@@ -139,6 +151,7 @@ public:
 
         speedBtn = new QPushButton(CtrlBar);
         speedBtn->setObjectName("speedBtn");
+        speedBtn->setMinimumSize(QSize(30, 30));
         speedBtn->setMaximumSize(QSize(30, 30));
 
         gridLayout->addWidget(speedBtn, 0, 4, 1, 1);
@@ -181,6 +194,8 @@ public:
         settingBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
         label->setText(QCoreApplication::translate("CtrlBar", "/", nullptr));
         speedBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
+        totalTimeEdit->setDisplayFormat(QCoreApplication::translate("CtrlBar", "HH:mm:ss", nullptr));
+        playTimeEdit->setDisplayFormat(QCoreApplication::translate("CtrlBar", "HH:mm:ss", nullptr));
     } // retranslateUi
 
 };

@@ -14,36 +14,57 @@
    <string>MainWind</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="showCtrlBarBgWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>50</y>
-      <width>911</width>
-      <height>551</height>
-     </rect>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
     </property>
-    <widget class="CtrlBar" name="ctrlBarWidget" native="true">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>479</y>
-       <width>881</width>
-       <height>61</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QWidget" name="showWidget" native="true">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>90</y>
-       <width>681</width>
-       <height>391</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QWidget" name="showCtrlBarBgWidget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="DisplayWind" name="showWidget" native="true"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="CtrlBar" name="ctrlBarWidget" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>60</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -57,16 +78,35 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="playListdockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>100</width>
+     <height>118</height>
+    </size>
+   </property>
    <attribute name="dockWidgetArea">
-    <number>4</number>
+    <number>2</number>
    </attribute>
-   <widget class="QWidget" name="playListContents"/>
+   <widget class="PlayListWind" name="playListContents">
+    <property name="minimumSize">
+     <size>
+      <width>100</width>
+      <height>100</height>
+     </size>
+    </property>
+   </widget>
   </widget>
   <widget class="QDockWidget" name="titleDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>34</height>
+    </size>
+   </property>
    <attribute name="dockWidgetArea">
     <number>4</number>
    </attribute>
-   <widget class="QWidget" name="titleContents"/>
+   <widget class="TitleBar" name="titleContents"/>
   </widget>
  </widget>
  <customwidgets>
@@ -74,6 +114,24 @@
    <class>CtrlBar</class>
    <extends>QWidget</extends>
    <header location="global">ctrlbar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TitleBar</class>
+   <extends>QWidget</extends>
+   <header location="global">titlebar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlayListWind</class>
+   <extends>QWidget</extends>
+   <header location="global">playlistwind.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DisplayWind</class>
+   <extends>QWidget</extends>
+   <header location="global">displaywind.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

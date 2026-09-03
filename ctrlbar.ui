@@ -6,17 +6,53 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>130</height>
+    <width>510</width>
+    <height>80</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>80</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QSlider" name="playSlider">
         <property name="orientation">
@@ -28,8 +64,8 @@
        <widget class="QWidget" name="widget_2" native="true">
         <property name="minimumSize">
          <size>
-          <width>120</width>
-          <height>40</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -39,18 +75,33 @@
          </size>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QPushButton" name="volumeBtn">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>20</width>
+             <height>20</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>20</width>
+             <height>20</height>
             </size>
            </property>
            <property name="text">
@@ -62,14 +113,14 @@
           <widget class="QSlider" name="volumeSlider">
            <property name="minimumSize">
             <size>
-             <width>80</width>
-             <height>25</height>
+             <width>60</width>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>80</width>
-             <height>25</height>
+             <height>20</height>
             </size>
            </property>
            <property name="orientation">
@@ -92,8 +143,8 @@
       <widget class="QPushButton" name="playOrPauseBtn">
        <property name="minimumSize">
         <size>
-         <width>0</width>
-         <height>0</height>
+         <width>30</width>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -109,6 +160,12 @@
      </item>
      <item row="0" column="3">
       <widget class="QPushButton" name="backwardBtn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -122,6 +179,12 @@
      </item>
      <item row="0" column="9">
       <widget class="QPushButton" name="playListBtn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -135,6 +198,12 @@
      </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="forwardBtn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -148,6 +217,12 @@
      </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="stopBtn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -161,6 +236,12 @@
      </item>
      <item row="0" column="10">
       <widget class="QPushButton" name="settingBtn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -187,6 +268,12 @@
      </item>
      <item row="0" column="4">
       <widget class="QPushButton" name="speedBtn">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -203,6 +290,9 @@
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::NoButtons</enum>
        </property>
+       <property name="displayFormat">
+        <string>HH:mm:ss</string>
+       </property>
       </widget>
      </item>
      <item row="0" column="5">
@@ -215,6 +305,9 @@
        </property>
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::NoButtons</enum>
+       </property>
+       <property name="displayFormat">
+        <string>HH:mm:ss</string>
        </property>
       </widget>
      </item>

@@ -12,11 +12,15 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 #include <ctrlbar.h>
+#include <displaywind.h>
+#include <playlistwind.h>
+#include <titlebar.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -24,15 +28,17 @@ class Ui_MainWind
 {
 public:
     QWidget *centralwidget;
+    QGridLayout *gridLayout;
     QWidget *showCtrlBarBgWidget;
+    QGridLayout *gridLayout_2;
+    DisplayWind *showWidget;
     CtrlBar *ctrlBarWidget;
-    QWidget *showWidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
     QDockWidget *playListdockWidget;
-    QWidget *playListContents;
+    PlayListWind *playListContents;
     QDockWidget *titleDockWidget;
-    QWidget *titleContents;
+    TitleBar *titleContents;
 
     void setupUi(QMainWindow *MainWind)
     {
@@ -41,15 +47,30 @@ public:
         MainWind->resize(1280, 800);
         centralwidget = new QWidget(MainWind);
         centralwidget->setObjectName("centralwidget");
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setSpacing(0);
+        gridLayout->setObjectName("gridLayout");
+        gridLayout->setContentsMargins(0, 0, 0, 0);
         showCtrlBarBgWidget = new QWidget(centralwidget);
         showCtrlBarBgWidget->setObjectName("showCtrlBarBgWidget");
-        showCtrlBarBgWidget->setGeometry(QRect(220, 50, 911, 551));
+        gridLayout_2 = new QGridLayout(showCtrlBarBgWidget);
+        gridLayout_2->setSpacing(0);
+        gridLayout_2->setObjectName("gridLayout_2");
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        showWidget = new DisplayWind(showCtrlBarBgWidget);
+        showWidget->setObjectName("showWidget");
+
+        gridLayout_2->addWidget(showWidget, 0, 0, 1, 1);
+
         ctrlBarWidget = new CtrlBar(showCtrlBarBgWidget);
         ctrlBarWidget->setObjectName("ctrlBarWidget");
-        ctrlBarWidget->setGeometry(QRect(20, 479, 881, 61));
-        showWidget = new QWidget(showCtrlBarBgWidget);
-        showWidget->setObjectName("showWidget");
-        showWidget->setGeometry(QRect(50, 90, 681, 391));
+        ctrlBarWidget->setMinimumSize(QSize(300, 60));
+
+        gridLayout_2->addWidget(ctrlBarWidget, 1, 0, 1, 1);
+
+
+        gridLayout->addWidget(showCtrlBarBgWidget, 0, 0, 1, 1);
+
         MainWind->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWind);
         menubar->setObjectName("menubar");
@@ -60,13 +81,16 @@ public:
         MainWind->setStatusBar(statusbar);
         playListdockWidget = new QDockWidget(MainWind);
         playListdockWidget->setObjectName("playListdockWidget");
-        playListContents = new QWidget();
+        playListdockWidget->setMinimumSize(QSize(100, 118));
+        playListContents = new PlayListWind();
         playListContents->setObjectName("playListContents");
+        playListContents->setMinimumSize(QSize(100, 100));
         playListdockWidget->setWidget(playListContents);
-        MainWind->addDockWidget(Qt::TopDockWidgetArea, playListdockWidget);
+        MainWind->addDockWidget(Qt::RightDockWidgetArea, playListdockWidget);
         titleDockWidget = new QDockWidget(MainWind);
         titleDockWidget->setObjectName("titleDockWidget");
-        titleContents = new QWidget();
+        titleDockWidget->setMinimumSize(QSize(200, 34));
+        titleContents = new TitleBar();
         titleContents->setObjectName("titleContents");
         titleDockWidget->setWidget(titleContents);
         MainWind->addDockWidget(Qt::TopDockWidgetArea, titleDockWidget);
