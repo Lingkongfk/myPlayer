@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     ctrlbar.cpp \
     displaywind.cpp \
+    ffmsg_queue.cpp \
     main.cpp \
     mainwind.cpp \
     playlistwind.cpp \
@@ -19,6 +20,8 @@ SOURCES += \
 HEADERS += \
     ctrlbar.h \
     displaywind.h \
+    ffmsg.h \
+    ffmsg_queue.h \
     mainwind.h \
     playlistwind.h \
     titlebar.h
@@ -37,3 +40,15 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
+
+
+INCLUDEPATH += D:/ffmpeg-sdk/include
+
+LIBS += -LD:/ffmpeg-sdk/lib \
+        -lavformat \
+        -lavcodec \
+        -lavutil \
+        -lavfilter \
+        -lswresample \
+        -lswscale \
+        -lavdevice
