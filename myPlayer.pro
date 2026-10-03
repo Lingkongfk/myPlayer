@@ -12,8 +12,10 @@ SOURCES += \
     ctrlbar.cpp \
     displaywind.cpp \
     ffmsg_queue.cpp \
+    ffplayer.cpp \
     main.cpp \
     mainwind.cpp \
+    mymediaplayer.cpp \
     playlistwind.cpp \
     titlebar.cpp
 
@@ -22,7 +24,9 @@ HEADERS += \
     displaywind.h \
     ffmsg.h \
     ffmsg_queue.h \
+    ffplayer.h \
     mainwind.h \
+    mymediaplayer.h \
     playlistwind.h \
     titlebar.h
 
@@ -43,8 +47,10 @@ RESOURCES += \
 
 
 INCLUDEPATH += D:/ffmpeg-sdk/include
+INCLUDEPATH += D:/SDL2-2.30.12/include
 
 LIBS += -LD:/ffmpeg-sdk/lib \
+        -LD:/SDL2-2.30.12/lib/x64 \
         -lavformat \
         -lavcodec \
         -lavutil \

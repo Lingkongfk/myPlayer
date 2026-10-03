@@ -27,7 +27,8 @@ public:
     {
         if (PlayListWind->objectName().isEmpty())
             PlayListWind->setObjectName("PlayListWind");
-        PlayListWind->resize(202, 362);
+        PlayListWind->resize(200, 200);
+        PlayListWind->setMaximumSize(QSize(200, 16777215));
         verticalLayout = new QVBoxLayout(PlayListWind);
         verticalLayout->setObjectName("verticalLayout");
         list = new QListWidget(PlayListWind);

@@ -65,6 +65,8 @@ public:
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         playSlider = new QSlider(widget);
         playSlider->setObjectName("playSlider");
+        playSlider->setMinimumSize(QSize(0, 11));
+        playSlider->setMaximumSize(QSize(16777215, 11));
         playSlider->setOrientation(Qt::Horizontal);
 
         horizontalLayout_2->addWidget(playSlider);
@@ -86,8 +88,8 @@ public:
 
         volumeSlider = new QSlider(widget_2);
         volumeSlider->setObjectName("volumeSlider");
-        volumeSlider->setMinimumSize(QSize(60, 0));
-        volumeSlider->setMaximumSize(QSize(80, 20));
+        volumeSlider->setMinimumSize(QSize(60, 11));
+        volumeSlider->setMaximumSize(QSize(80, 11));
         volumeSlider->setOrientation(Qt::Horizontal);
 
         horizontalLayout->addWidget(volumeSlider);

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <mutex>
 #include <condition_variable>
+#include <SDL.h>
+//TODO 修改成类
 
 typedef struct AVMessage{
     int what;                 //消息类型
@@ -14,7 +16,6 @@ typedef struct AVMessage{
     struct AVMessage* next;   //下一个消息
 }AVMessage;
 
-
 typedef struct MessageQueue{
     AVMessage* first_msg, *last_msg; //消息队列头部，尾部
     int nb_messages;                //消息个数
@@ -24,7 +25,6 @@ typedef struct MessageQueue{
     AVMessage* recycle_msg;         //消息循环使用
     int recycle_count;              //循环次数，利用局部性
     int alloc_count;                //分配次数
-
 }MessageQueue;
 
 //释放msg的obj资源
@@ -75,10 +75,6 @@ int msg_queue_get(MessageQueue  *q,  AVMessage  *msg,int  block);
 
 //消息删除  把队列⾥同⼀消息类型的消息全删除掉
 void msg_queue_remove(MessageQueue *q, int what);
-
-
-
-
 
 
 

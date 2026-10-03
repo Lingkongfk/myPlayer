@@ -15,6 +15,13 @@ public:
     explicit CtrlBar(QWidget *parent = nullptr);
     ~CtrlBar();
 
+signals:
+    void SigPlayOrPause(); //开始暂停键信号
+private slots:
+    void on_playOrPauseBtn_clicked();
+
+    void on_stopBtn_clicked();
+
 private:
     Ui::CtrlBar *ui;
 };

@@ -55,6 +55,18 @@
       </property>
       <item>
        <widget class="QSlider" name="playSlider">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>11</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>11</height>
+         </size>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -114,13 +126,13 @@
            <property name="minimumSize">
             <size>
              <width>60</width>
-             <height>0</height>
+             <height>11</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>80</width>
-             <height>20</height>
+             <height>11</height>
             </size>
            </property>
            <property name="orientation">

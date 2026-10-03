@@ -42,7 +42,7 @@ int msg_queue_put_private(MessageQueue *q, AVMessage *msg)
         q->alloc_count++;
         msg1 = (AVMessage*)av_malloc(sizeof(AVMessage));
     }
-    *msg1 = *msg;
+    *msg1 = *msg;//浅拷贝
     msg1->next = NULL;
 
     //插入队列
@@ -95,7 +95,7 @@ int msg_queue_get(MessageQueue *q, AVMessage *msg, int block)
             //把msg1放到回收里面
             msg1->next = q->recycle_msg;
             q->recycle_msg = msg1;
-
+            break;
         }else if(!block){
             ret = 0;
             break;
