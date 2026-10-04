@@ -7,7 +7,7 @@ MainWind::MainWind(QWidget *parent)
 {
     ui->setupUi(this);
     QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigPlayOrPause, this, &MainWind::OnPlayOrPause);
-
+    QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigStop, this, &MainWind::OnStop);
 }
 
 MainWind::~MainWind()
@@ -76,5 +76,16 @@ void MainWind::OnPlayOrPause()
         }
     }else{
         //播放器已经有了，这里就是暂停或者恢复播放了
+    }
+}
+
+void MainWind::OnStop()
+{
+    qDebug() << "OnStop call";
+    if(mp_){
+        mp_->stop();
+        mp_->destory();
+        delete mp_;
+        mp_ = NULL;
     }
 }

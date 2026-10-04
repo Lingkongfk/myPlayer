@@ -41,17 +41,19 @@ static constexpr auto qt_meta_stringdata_CLASSCtrlBarENDCLASS = QtMocHelpers::st
     "CtrlBar",
     "SigPlayOrPause",
     "",
+    "SigStop",
     "on_playOrPauseBtn_clicked",
     "on_stopBtn_clicked"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSCtrlBarENDCLASS_t {
-    uint offsetsAndSizes[10];
+    uint offsetsAndSizes[12];
     char stringdata0[8];
     char stringdata1[15];
     char stringdata2[1];
-    char stringdata3[26];
-    char stringdata4[19];
+    char stringdata3[8];
+    char stringdata4[26];
+    char stringdata5[19];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSCtrlBarENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -60,12 +62,14 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSCtrlBarENDCLASS_t qt_meta_strin
         QT_MOC_LITERAL(0, 7),  // "CtrlBar"
         QT_MOC_LITERAL(8, 14),  // "SigPlayOrPause"
         QT_MOC_LITERAL(23, 0),  // ""
-        QT_MOC_LITERAL(24, 25),  // "on_playOrPauseBtn_clicked"
-        QT_MOC_LITERAL(50, 18)   // "on_stopBtn_clicked"
+        QT_MOC_LITERAL(24, 7),  // "SigStop"
+        QT_MOC_LITERAL(32, 25),  // "on_playOrPauseBtn_clicked"
+        QT_MOC_LITERAL(58, 18)   // "on_stopBtn_clicked"
     },
     "CtrlBar",
     "SigPlayOrPause",
     "",
+    "SigStop",
     "on_playOrPauseBtn_clicked",
     "on_stopBtn_clicked"
 };
@@ -79,21 +83,23 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSCtrlBarENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   32,    2, 0x06,    1 /* Public */,
+       1,    0,   38,    2, 0x06,    1 /* Public */,
+       3,    0,   39,    2, 0x06,    2 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       3,    0,   33,    2, 0x08,    2 /* Private */,
-       4,    0,   34,    2, 0x08,    3 /* Private */,
+       4,    0,   40,    2, 0x08,    3 /* Private */,
+       5,    0,   41,    2, 0x08,    4 /* Private */,
 
  // signals: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
  // slots: parameters
@@ -114,6 +120,8 @@ Q_CONSTINIT const QMetaObject CtrlBar::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<CtrlBar, std::true_type>,
         // method 'SigPlayOrPause'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'SigStop'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_playOrPauseBtn_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_stopBtn_clicked'
@@ -129,8 +137,9 @@ void CtrlBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         (void)_t;
         switch (_id) {
         case 0: _t->SigPlayOrPause(); break;
-        case 1: _t->on_playOrPauseBtn_clicked(); break;
-        case 2: _t->on_stopBtn_clicked(); break;
+        case 1: _t->SigStop(); break;
+        case 2: _t->on_playOrPauseBtn_clicked(); break;
+        case 3: _t->on_stopBtn_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -139,6 +148,13 @@ void CtrlBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
             using _t = void (CtrlBar::*)();
             if (_t _q_method = &CtrlBar::SigPlayOrPause; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (CtrlBar::*)();
+            if (_t _q_method = &CtrlBar::SigStop; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 1;
                 return;
             }
         }
@@ -165,13 +181,13 @@ int CtrlBar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }
@@ -180,5 +196,11 @@ int CtrlBar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void CtrlBar::SigPlayOrPause()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void CtrlBar::SigStop()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 QT_WARNING_POP

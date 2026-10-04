@@ -40,6 +40,7 @@ int MyMediaPlayer::create(std::function<int(void*)> msg_loop)
 
 int MyMediaPlayer::destory()
 {
+    ffplayer_->destory();
     return 0;
 }
 
@@ -69,6 +70,14 @@ int MyMediaPlayer::prepare_async()
 int MyMediaPlayer::start()
 {
     ffp_notify_msg1(ffplayer_, FFP_REQ_START);
+}
+
+int MyMediaPlayer::stop()
+{
+    int ret = ffplayer_->stop_l();
+    if(ret < 0){
+        return ret;
+    }
 }
 
 int MyMediaPlayer::get_msg(AVMessage *msg, int block)

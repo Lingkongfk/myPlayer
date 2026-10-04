@@ -17,6 +17,7 @@ public:
 
 signals:
     void SigPlayOrPause(); //开始暂停键信号
+    void SigStop();
 private slots:
     void on_playOrPauseBtn_clicked();
 

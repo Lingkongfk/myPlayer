@@ -49,5 +49,6 @@ void CtrlBar::on_playOrPauseBtn_clicked()
 void CtrlBar::on_stopBtn_clicked()
 {
     qDebug() << "on_stopBtn_clicked";
+    emit SigStop();
 }
 

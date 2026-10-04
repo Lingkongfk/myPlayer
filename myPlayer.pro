@@ -6,12 +6,25 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += D:/ffmpeg-sdk/include
+INCLUDEPATH += D:/SDL2-2.30.12/include
 
+LIBS += -LD:/ffmpeg-sdk/lib \
+        -LD:/SDL2-2.30.12/lib/x64 \
+        -lavformat \
+        -lavcodec \
+        -lavutil \
+        -lavfilter \
+        -lswresample \
+        -lswscale \
+        -lavdevice \
+        -lSDL2
 
 SOURCES += \
     ctrlbar.cpp \
     displaywind.cpp \
     ffmsg_queue.cpp \
+    ffplay_def.cpp \
     ffplayer.cpp \
     main.cpp \
     mainwind.cpp \
@@ -24,6 +37,7 @@ HEADERS += \
     displaywind.h \
     ffmsg.h \
     ffmsg_queue.h \
+    ffplay_def.h \
     ffplayer.h \
     mainwind.h \
     mymediaplayer.h \
@@ -46,15 +60,3 @@ RESOURCES += \
     res.qrc
 
 
-INCLUDEPATH += D:/ffmpeg-sdk/include
-INCLUDEPATH += D:/SDL2-2.30.12/include
-
-LIBS += -LD:/ffmpeg-sdk/lib \
-        -LD:/SDL2-2.30.12/lib/x64 \
-        -lavformat \
-        -lavcodec \
-        -lavutil \
-        -lavfilter \
-        -lswresample \
-        -lswscale \
-        -lavdevice

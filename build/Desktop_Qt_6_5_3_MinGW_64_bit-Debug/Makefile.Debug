@@ -19,7 +19,7 @@ CXXFLAGS      = -fno-keep-inline-dllexport -g -std=gnu++1z -Wall -Wextra -Wextra
 INCPATH       = -I../../../myPlayer -I. -ID:/ffmpeg-sdk/include -ID:/SDL2-2.30.12/include -ID:/software/qt/6.5.3/mingw_64/include -ID:/software/qt/6.5.3/mingw_64/include/QtWidgets -ID:/software/qt/6.5.3/mingw_64/include/QtGui -ID:/software/qt/6.5.3/mingw_64/include/QtCore -Idebug -I. -I/include -ID:/software/qt/6.5.3/mingw_64/mkspecs/win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -LD:\ffmpeg-sdk\lib -LD:\SDL2-2.30.12\lib\x64 -lavformat -lavcodec -lavutil -lavfilter -lswresample -lswscale -lavdevice D:\software\qt\6.5.3\mingw_64\lib\libQt6Widgets.a D:\software\qt\6.5.3\mingw_64\lib\libQt6Gui.a D:\software\qt\6.5.3\mingw_64\lib\libQt6Core.a -lmingw32 D:\software\qt\6.5.3\mingw_64\lib\libQt6EntryPoint.a -lshell32  
+LIBS        =        -LD:\ffmpeg-sdk\lib -LD:\SDL2-2.30.12\lib\x64 -lavformat -lavcodec -lavutil -lavfilter -lswresample -lswscale -lavdevice -lSDL2 D:\software\qt\6.5.3\mingw_64\lib\libQt6Widgets.a D:\software\qt\6.5.3\mingw_64\lib\libQt6Gui.a D:\software\qt\6.5.3\mingw_64\lib\libQt6Core.a -lmingw32 D:\software\qt\6.5.3\mingw_64\lib\libQt6EntryPoint.a -lshell32  
 QMAKE         = D:\software\qt\6.5.3\mingw_64\bin\qmake.exe
 DEL_FILE      = del
 CHK_DIR_EXISTS= if not exist
@@ -53,6 +53,7 @@ OBJECTS_DIR   = debug
 SOURCES       = ..\..\ctrlbar.cpp \
 		..\..\displaywind.cpp \
 		..\..\ffmsg_queue.cpp \
+		..\..\ffplay_def.cpp \
 		..\..\ffplayer.cpp \
 		..\..\main.cpp \
 		..\..\mainwind.cpp \
@@ -67,6 +68,7 @@ SOURCES       = ..\..\ctrlbar.cpp \
 OBJECTS       = debug/ctrlbar.o \
 		debug/displaywind.o \
 		debug/ffmsg_queue.o \
+		debug/ffplay_def.o \
 		debug/ffplayer.o \
 		debug/main.o \
 		debug/mainwind.o \
@@ -84,6 +86,7 @@ DIST          =  ..\..\ctrlbar.h \
 		..\..\displaywind.h \
 		..\..\ffmsg.h \
 		..\..\ffmsg_queue.h \
+		..\..\ffplay_def.h \
 		..\..\ffplayer.h \
 		..\..\mainwind.h \
 		..\..\mymediaplayer.h \
@@ -91,6 +94,7 @@ DIST          =  ..\..\ctrlbar.h \
 		..\..\titlebar.h ..\..\ctrlbar.cpp \
 		..\..\displaywind.cpp \
 		..\..\ffmsg_queue.cpp \
+		..\..\ffplay_def.cpp \
 		..\..\ffplayer.cpp \
 		..\..\main.cpp \
 		..\..\mainwind.cpp \
@@ -116,10 +120,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) myPlayer.zip $(SOURCES) $(DIST) ..\..\..\..\myPlayer.pro D:\software\qt\6.5.3\mingw_64\mkspecs\features\spec_pre.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\device_config.prf D:\software\qt\6.5.3\mingw_64\mkspecs\common\sanitize.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\gcc-base.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\g++-base.conf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\windows_vulkan_sdk.prf D:\software\qt\6.5.3\mingw_64\mkspecs\common\windows-vulkan.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\g++-win32.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\windows-desktop.conf D:\software\qt\6.5.3\mingw_64\mkspecs\qconfig.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_ext_freetype.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_ext_libjpeg.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_ext_libpng.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3danimation.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3danimation_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dcore.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dcore_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dextras.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dextras_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dinput.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dinput_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dlogic.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dlogic_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickanimation.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickextras.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickinput.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickrender.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3drender.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3drender_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_activeqt.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_activeqt_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axbase_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axcontainer.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axcontainer_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axserver.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axserver_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_bluetooth.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_bluetooth_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_bodymovin_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_charts.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_charts_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_chartsqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_chartsqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_concurrent.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_concurrent_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core5compat.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core5compat_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualization.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualization_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_dbus.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_dbus_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_designer.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_designer_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_designercomponents_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_entrypoint_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_example_icons_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_fb_support_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_freetype_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_grpc.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_grpc_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_gui.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_gui_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_harfbuzz_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_help.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_help_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_httpserver.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_httpserver_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttracker.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttracker_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_jpeg_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_jsonrpc_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsanimation.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsanimation_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssettings.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssettings_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssharedimage.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssharedimage_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_languageserver_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_linguist.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_linguist_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_location.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_location_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimedia.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimedia_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimediaquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimediawidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_network.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_network_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_networkauth.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_networkauth_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_nfc.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_nfc_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_opengl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_opengl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_openglwidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_openglwidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_png_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioning.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioning_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioningquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioningquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_printsupport.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_printsupport_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_protobuf.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_protobuf_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlcore.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlcore_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmldebug_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmldom_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlintegration.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlintegration_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlmodels.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlmodels_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmltest.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmltest_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmltyperegistrar_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3d.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3d_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3deffects.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3deffects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dglslparser_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticles.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticles_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysics.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysics_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dspatialaudio_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dutils.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dutils_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrolstestutilsprivate_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickeffects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicklayouts.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicklayouts_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickparticles_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickshapes_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktemplates2.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktestutilsprivate_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktimeline.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktimeline_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickwidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjects.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_repparser.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_repparser_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxmlqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxmlqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensors.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensors_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensorsquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensorsquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialbus.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialbus_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialport.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialport_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_shadertools.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_shadertools_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_spatialaudio.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_spatialaudio_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sql.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sql_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachine.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachine_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachineqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachineqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svg.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svg_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svgwidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svgwidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_testlib.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_testlib_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_texttospeech.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_texttospeech_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_tools_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_uiplugin.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_uitools.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_uitools_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webchannel.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webchannel_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_websockets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_websockets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webview.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webview_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webviewquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webviewquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_widgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_widgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_xml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_xml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_zlib_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\features\qt_functions.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qt_config.prf D:\software\qt\6.5.3\mingw_64\mkspecs\win32-g++\qmake.conf D:\software\qt\6.5.3\mingw_64\mkspecs\features\spec_post.prf .qmake.stash D:\software\qt\6.5.3\mingw_64\mkspecs\features\exclusive_builds.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\toolchain.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\default_pre.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\default_pre.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\resolve_config.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\exclusive_builds_post.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\default_post.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\build_pass.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qml_debug.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\entrypoint.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\precompile_header.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\warn_on.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qt.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\resources_functions.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\resources.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\moc.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\opengl.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\uic.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qmake_use.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\file_copies.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\windows.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\testcase_targets.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\exceptions.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\yacc.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\lex.prf ..\..\myPlayer.pro ..\..\res.qrc D:\software\qt\6.5.3\mingw_64\lib\Qt6Widgets.prl D:\software\qt\6.5.3\mingw_64\lib\Qt6Gui.prl D:\software\qt\6.5.3\mingw_64\lib\Qt6Core.prl D:\software\qt\6.5.3\mingw_64\lib\Qt6EntryPoint.prl   ..\..\res.qrc D:\software\qt\6.5.3\mingw_64\mkspecs\features\data\dummy.cpp ..\..\ctrlbar.h ..\..\displaywind.h ..\..\ffmsg.h ..\..\ffmsg_queue.h ..\..\ffplayer.h ..\..\mainwind.h ..\..\mymediaplayer.h ..\..\playlistwind.h ..\..\titlebar.h  ..\..\ctrlbar.cpp ..\..\displaywind.cpp ..\..\ffmsg_queue.cpp ..\..\ffplayer.cpp ..\..\main.cpp ..\..\mainwind.cpp ..\..\mymediaplayer.cpp ..\..\playlistwind.cpp ..\..\titlebar.cpp ..\..\ctrlbar.ui ..\..\displaywind.ui ..\..\mainwind.ui ..\..\playlistwind.ui ..\..\titlebar.ui    
+	$(ZIP) myPlayer.zip $(SOURCES) $(DIST) ..\..\..\..\myPlayer.pro D:\software\qt\6.5.3\mingw_64\mkspecs\features\spec_pre.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\device_config.prf D:\software\qt\6.5.3\mingw_64\mkspecs\common\sanitize.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\gcc-base.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\g++-base.conf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\windows_vulkan_sdk.prf D:\software\qt\6.5.3\mingw_64\mkspecs\common\windows-vulkan.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\g++-win32.conf D:\software\qt\6.5.3\mingw_64\mkspecs\common\windows-desktop.conf D:\software\qt\6.5.3\mingw_64\mkspecs\qconfig.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_ext_freetype.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_ext_libjpeg.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_ext_libpng.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3danimation.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3danimation_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dcore.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dcore_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dextras.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dextras_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dinput.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dinput_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dlogic.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dlogic_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickanimation.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickextras.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickinput.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickrender.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3drender.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_3drender_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_activeqt.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_activeqt_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axbase_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axcontainer.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axcontainer_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axserver.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_axserver_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_bluetooth.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_bluetooth_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_bodymovin_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_charts.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_charts_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_chartsqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_chartsqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_concurrent.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_concurrent_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core5compat.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core5compat_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_core_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualization.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualization_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_dbus.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_dbus_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_designer.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_designer_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_designercomponents_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_entrypoint_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_example_icons_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_fb_support_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_freetype_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_grpc.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_grpc_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_gui.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_gui_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_harfbuzz_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_help.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_help_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_httpserver.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_httpserver_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttracker.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttracker_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_jpeg_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_jsonrpc_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsanimation.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsanimation_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssettings.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssettings_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssharedimage.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labssharedimage_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_languageserver_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_linguist.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_linguist_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_location.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_location_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimedia.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimedia_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimediaquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimediawidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_network.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_network_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_networkauth.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_networkauth_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_nfc.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_nfc_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_opengl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_opengl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_openglwidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_openglwidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_png_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioning.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioning_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioningquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_positioningquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_printsupport.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_printsupport_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_protobuf.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_protobuf_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlcore.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlcore_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmldebug_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmldom_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlintegration.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlintegration_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlmodels.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlmodels_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmltest.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmltest_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmltyperegistrar_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3d.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3d_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3deffects.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3deffects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dglslparser_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticles.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dparticles_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysics.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysics_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dspatialaudio_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dutils.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick3dutils_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickcontrolstestutilsprivate_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickeffects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicklayouts.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicklayouts_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickparticles_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickshapes_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktemplates2.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktestutilsprivate_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktimeline.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quicktimeline_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickwidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjects.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_repparser.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_repparser_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxmlqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_scxmlqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensors.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensors_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensorsquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sensorsquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialbus.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialbus_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialport.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_serialport_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_shadertools.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_shadertools_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_spatialaudio.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_spatialaudio_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sql.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_sql_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachine.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachine_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachineqml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_statemachineqml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svg.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svg_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svgwidgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_svgwidgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_testlib.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_testlib_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_texttospeech.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_texttospeech_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_tools_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_uiplugin.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_uitools.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_uitools_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webchannel.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webchannel_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_websockets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_websockets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webview.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webview_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webviewquick.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_webviewquick_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_widgets.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_widgets_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_xml.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_xml_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\modules\qt_lib_zlib_private.pri D:\software\qt\6.5.3\mingw_64\mkspecs\features\qt_functions.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qt_config.prf D:\software\qt\6.5.3\mingw_64\mkspecs\win32-g++\qmake.conf D:\software\qt\6.5.3\mingw_64\mkspecs\features\spec_post.prf .qmake.stash D:\software\qt\6.5.3\mingw_64\mkspecs\features\exclusive_builds.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\toolchain.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\default_pre.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\default_pre.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\resolve_config.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\exclusive_builds_post.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\default_post.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\build_pass.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qml_debug.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\entrypoint.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\precompile_header.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\warn_on.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qt.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\resources_functions.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\resources.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\moc.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\opengl.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\uic.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\qmake_use.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\file_copies.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\win32\windows.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\testcase_targets.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\exceptions.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\yacc.prf D:\software\qt\6.5.3\mingw_64\mkspecs\features\lex.prf ..\..\myPlayer.pro ..\..\res.qrc D:\software\qt\6.5.3\mingw_64\lib\Qt6Widgets.prl D:\software\qt\6.5.3\mingw_64\lib\Qt6Gui.prl D:\software\qt\6.5.3\mingw_64\lib\Qt6Core.prl D:\software\qt\6.5.3\mingw_64\lib\Qt6EntryPoint.prl   ..\..\res.qrc D:\software\qt\6.5.3\mingw_64\mkspecs\features\data\dummy.cpp ..\..\ctrlbar.h ..\..\displaywind.h ..\..\ffmsg.h ..\..\ffmsg_queue.h ..\..\ffplay_def.h ..\..\ffplayer.h ..\..\mainwind.h ..\..\mymediaplayer.h ..\..\playlistwind.h ..\..\titlebar.h  ..\..\ctrlbar.cpp ..\..\displaywind.cpp ..\..\ffmsg_queue.cpp ..\..\ffplay_def.cpp ..\..\ffplayer.cpp ..\..\main.cpp ..\..\mainwind.cpp ..\..\mymediaplayer.cpp ..\..\playlistwind.cpp ..\..\titlebar.cpp ..\..\ctrlbar.ui ..\..\displaywind.ui ..\..\mainwind.ui ..\..\playlistwind.ui ..\..\titlebar.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\ctrlbar.o debug\displaywind.o debug\ffmsg_queue.o debug\ffplayer.o debug\main.o debug\mainwind.o debug\mymediaplayer.o debug\playlistwind.o debug\titlebar.o debug\qrc_res.o debug\moc_ctrlbar.o debug\moc_displaywind.o debug\moc_mainwind.o debug\moc_playlistwind.o debug\moc_titlebar.o
+	-$(DEL_FILE) debug\ctrlbar.o debug\displaywind.o debug\ffmsg_queue.o debug\ffplay_def.o debug\ffplayer.o debug\main.o debug\mainwind.o debug\mymediaplayer.o debug\playlistwind.o debug\titlebar.o debug\qrc_res.o debug\moc_ctrlbar.o debug\moc_displaywind.o debug\moc_mainwind.o debug\moc_playlistwind.o debug\moc_titlebar.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -643,6 +647,118 @@ debug/moc_mainwind.cpp: ../../mainwind.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtGui/QTransform \
 		D:/software/qt/6.5.3/mingw_64/include/QtCore/qnativeinterface.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/qtabwidget.h \
+		../../mymediaplayer.h \
+		../../ffmsg_queue.h \
+		D:/SDL2-2.30.12/include/SDL.h \
+		D:/SDL2-2.30.12/include/SDL_main.h \
+		D:/SDL2-2.30.12/include/SDL_stdinc.h \
+		D:/SDL2-2.30.12/include/SDL_config.h \
+		D:/SDL2-2.30.12/include/SDL_platform.h \
+		D:/SDL2-2.30.12/include/begin_code.h \
+		D:/SDL2-2.30.12/include/close_code.h \
+		D:/SDL2-2.30.12/include/SDL_config_windows.h \
+		D:/SDL2-2.30.12/include/SDL_config_winrt.h \
+		D:/SDL2-2.30.12/include/SDL_config_wingdk.h \
+		D:/SDL2-2.30.12/include/SDL_config_xbox.h \
+		D:/SDL2-2.30.12/include/SDL_config_macosx.h \
+		D:/SDL2-2.30.12/include/SDL_config_iphoneos.h \
+		D:/SDL2-2.30.12/include/SDL_config_android.h \
+		D:/SDL2-2.30.12/include/SDL_config_os2.h \
+		D:/SDL2-2.30.12/include/SDL_config_emscripten.h \
+		D:/SDL2-2.30.12/include/SDL_config_ngage.h \
+		D:/SDL2-2.30.12/include/SDL_config_minimal.h \
+		D:/SDL2-2.30.12/include/SDL_assert.h \
+		D:/SDL2-2.30.12/include/SDL_atomic.h \
+		D:/SDL2-2.30.12/include/SDL_audio.h \
+		D:/SDL2-2.30.12/include/SDL_error.h \
+		D:/SDL2-2.30.12/include/SDL_endian.h \
+		D:/SDL2-2.30.12/include/SDL_mutex.h \
+		D:/SDL2-2.30.12/include/SDL_thread.h \
+		D:/SDL2-2.30.12/include/SDL_rwops.h \
+		D:/SDL2-2.30.12/include/SDL_clipboard.h \
+		D:/SDL2-2.30.12/include/SDL_cpuinfo.h \
+		D:/SDL2-2.30.12/include/SDL_events.h \
+		D:/SDL2-2.30.12/include/SDL_video.h \
+		D:/SDL2-2.30.12/include/SDL_pixels.h \
+		D:/SDL2-2.30.12/include/SDL_rect.h \
+		D:/SDL2-2.30.12/include/SDL_surface.h \
+		D:/SDL2-2.30.12/include/SDL_blendmode.h \
+		D:/SDL2-2.30.12/include/SDL_keyboard.h \
+		D:/SDL2-2.30.12/include/SDL_keycode.h \
+		D:/SDL2-2.30.12/include/SDL_scancode.h \
+		D:/SDL2-2.30.12/include/SDL_mouse.h \
+		D:/SDL2-2.30.12/include/SDL_joystick.h \
+		D:/SDL2-2.30.12/include/SDL_guid.h \
+		D:/SDL2-2.30.12/include/SDL_gamecontroller.h \
+		D:/SDL2-2.30.12/include/SDL_sensor.h \
+		D:/SDL2-2.30.12/include/SDL_quit.h \
+		D:/SDL2-2.30.12/include/SDL_gesture.h \
+		D:/SDL2-2.30.12/include/SDL_touch.h \
+		D:/SDL2-2.30.12/include/SDL_filesystem.h \
+		D:/SDL2-2.30.12/include/SDL_haptic.h \
+		D:/SDL2-2.30.12/include/SDL_hidapi.h \
+		D:/SDL2-2.30.12/include/SDL_hints.h \
+		D:/SDL2-2.30.12/include/SDL_loadso.h \
+		D:/SDL2-2.30.12/include/SDL_log.h \
+		D:/SDL2-2.30.12/include/SDL_messagebox.h \
+		D:/SDL2-2.30.12/include/SDL_metal.h \
+		D:/SDL2-2.30.12/include/SDL_power.h \
+		D:/SDL2-2.30.12/include/SDL_render.h \
+		D:/SDL2-2.30.12/include/SDL_shape.h \
+		D:/SDL2-2.30.12/include/SDL_system.h \
+		D:/SDL2-2.30.12/include/SDL_timer.h \
+		D:/SDL2-2.30.12/include/SDL_version.h \
+		D:/SDL2-2.30.12/include/SDL_locale.h \
+		D:/SDL2-2.30.12/include/SDL_misc.h \
+		../../ffmsg.h \
+		../../ffplayer.h \
+		../../ffplay_def.h \
+		D:/ffmpeg-sdk/include/libavutil/avstring.h \
+		D:/ffmpeg-sdk/include/libavutil/attributes.h \
+		D:/ffmpeg-sdk/include/libavutil/eval.h \
+		D:/ffmpeg-sdk/include/libavutil/mathematics.h \
+		D:/ffmpeg-sdk/include/libavutil/rational.h \
+		D:/ffmpeg-sdk/include/libavutil/intfloat.h \
+		D:/ffmpeg-sdk/include/libavutil/pixdesc.h \
+		D:/ffmpeg-sdk/include/libavutil/pixfmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avconfig.h \
+		D:/ffmpeg-sdk/include/libavutil/version.h \
+		D:/ffmpeg-sdk/include/libavutil/macros.h \
+		D:/ffmpeg-sdk/include/libavutil/imgutils.h \
+		D:/ffmpeg-sdk/include/libavutil/dict.h \
+		D:/ffmpeg-sdk/include/libavutil/parseutils.h \
+		D:/ffmpeg-sdk/include/libavutil/samplefmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avassert.h \
+		D:/ffmpeg-sdk/include/libavutil/log.h \
+		D:/ffmpeg-sdk/include/libavutil/time.h \
+		D:/ffmpeg-sdk/include/libavformat/avformat.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_par.h \
+		D:/ffmpeg-sdk/include/libavutil/avutil.h \
+		D:/ffmpeg-sdk/include/libavutil/common.h \
+		D:/ffmpeg-sdk/include/libavutil/error.h \
+		D:/ffmpeg-sdk/include/libavutil/mem.h \
+		D:/ffmpeg-sdk/include/libavutil/channel_layout.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_id.h \
+		D:/ffmpeg-sdk/include/libavcodec/version_major.h \
+		D:/ffmpeg-sdk/include/libavcodec/defs.h \
+		D:/ffmpeg-sdk/include/libavcodec/packet.h \
+		D:/ffmpeg-sdk/include/libavutil/buffer.h \
+		D:/ffmpeg-sdk/include/libavformat/avio.h \
+		D:/ffmpeg-sdk/include/libavformat/version_major.h \
+		D:/ffmpeg-sdk/include/libavformat/version.h \
+		D:/ffmpeg-sdk/include/libavutil/frame.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec.h \
+		D:/ffmpeg-sdk/include/libavutil/hwcontext.h \
+		D:/ffmpeg-sdk/include/libavdevice/avdevice.h \
+		D:/ffmpeg-sdk/include/libavdevice/version_major.h \
+		D:/ffmpeg-sdk/include/libavdevice/version.h \
+		D:/ffmpeg-sdk/include/libavutil/opt.h \
+		D:/ffmpeg-sdk/include/libswscale/swscale.h \
+		D:/ffmpeg-sdk/include/libswscale/version_major.h \
+		D:/ffmpeg-sdk/include/libswscale/version.h \
+		D:/ffmpeg-sdk/include/libswresample/swresample.h \
+		D:/ffmpeg-sdk/include/libswresample/version_major.h \
+		D:/ffmpeg-sdk/include/libswresample/version.h \
 		debug/moc_predefs.h \
 		D:/software/qt/6.5.3/mingw_64/bin/moc.exe
 	D:\software\qt\6.5.3\mingw_64\bin\moc.exe $(DEFINES) --include D:/qtStore/ffmpegLearn/myPlayer/build/Desktop_Qt_6_5_3_MinGW_64_bit-Debug/debug/moc_predefs.h -ID:/software/qt/6.5.3/mingw_64/mkspecs/win32-g++ -ID:/qtStore/ffmpegLearn/myPlayer -ID:/ffmpeg-sdk/include -ID:/SDL2-2.30.12/include -ID:/software/qt/6.5.3/mingw_64/include -ID:/software/qt/6.5.3/mingw_64/include/QtWidgets -ID:/software/qt/6.5.3/mingw_64/include/QtGui -ID:/software/qt/6.5.3/mingw_64/include/QtCore -I. -ID:/software/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++ -ID:/software/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32 -ID:/software/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward -ID:/software/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include -ID:/software/qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed -ID:/software/qt/Tools/mingw1120_64/x86_64-w64-mingw32/include ..\..\mainwind.h -o debug\moc_mainwind.cpp
@@ -1849,7 +1965,8 @@ debug/ctrlbar.o: ../../ctrlbar.cpp ../../ctrlbar.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/qabstractspinbox.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtGui/qvalidator.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtCore/qregularexpression.h \
-		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/QVBoxLayout
+		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/QVBoxLayout \
+		D:/software/qt/6.5.3/mingw_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ctrlbar.o ..\..\ctrlbar.cpp
 
 debug/displaywind.o: ../../displaywind.cpp ../../displaywind.h \
@@ -2146,7 +2263,227 @@ debug/ffmsg_queue.o: ../../ffmsg_queue.cpp ../../ffmsg_queue.h \
 		D:/ffmpeg-sdk/include/libavutil/opt.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ffmsg_queue.o ..\..\ffmsg_queue.cpp
 
-debug/ffplayer.o: ../../ffplayer.cpp ../../ffplayer.h
+debug/ffplay_def.o: ../../ffplay_def.cpp ../../ffplay_def.h \
+		D:/ffmpeg-sdk/include/libavutil/avstring.h \
+		D:/ffmpeg-sdk/include/libavutil/attributes.h \
+		D:/ffmpeg-sdk/include/libavutil/eval.h \
+		D:/ffmpeg-sdk/include/libavutil/mathematics.h \
+		D:/ffmpeg-sdk/include/libavutil/rational.h \
+		D:/ffmpeg-sdk/include/libavutil/intfloat.h \
+		D:/ffmpeg-sdk/include/libavutil/pixdesc.h \
+		D:/ffmpeg-sdk/include/libavutil/pixfmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avconfig.h \
+		D:/ffmpeg-sdk/include/libavutil/version.h \
+		D:/ffmpeg-sdk/include/libavutil/macros.h \
+		D:/ffmpeg-sdk/include/libavutil/imgutils.h \
+		D:/ffmpeg-sdk/include/libavutil/dict.h \
+		D:/ffmpeg-sdk/include/libavutil/parseutils.h \
+		D:/ffmpeg-sdk/include/libavutil/samplefmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avassert.h \
+		D:/ffmpeg-sdk/include/libavutil/log.h \
+		D:/ffmpeg-sdk/include/libavutil/time.h \
+		D:/ffmpeg-sdk/include/libavformat/avformat.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_par.h \
+		D:/ffmpeg-sdk/include/libavutil/avutil.h \
+		D:/ffmpeg-sdk/include/libavutil/common.h \
+		D:/ffmpeg-sdk/include/libavutil/error.h \
+		D:/ffmpeg-sdk/include/libavutil/mem.h \
+		D:/ffmpeg-sdk/include/libavutil/channel_layout.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_id.h \
+		D:/ffmpeg-sdk/include/libavcodec/version_major.h \
+		D:/ffmpeg-sdk/include/libavcodec/defs.h \
+		D:/ffmpeg-sdk/include/libavcodec/packet.h \
+		D:/ffmpeg-sdk/include/libavutil/buffer.h \
+		D:/ffmpeg-sdk/include/libavformat/avio.h \
+		D:/ffmpeg-sdk/include/libavformat/version_major.h \
+		D:/ffmpeg-sdk/include/libavformat/version.h \
+		D:/ffmpeg-sdk/include/libavutil/frame.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec.h \
+		D:/ffmpeg-sdk/include/libavutil/hwcontext.h \
+		D:/ffmpeg-sdk/include/libavdevice/avdevice.h \
+		D:/ffmpeg-sdk/include/libavdevice/version_major.h \
+		D:/ffmpeg-sdk/include/libavdevice/version.h \
+		D:/ffmpeg-sdk/include/libavutil/opt.h \
+		D:/ffmpeg-sdk/include/libswscale/swscale.h \
+		D:/ffmpeg-sdk/include/libswscale/version_major.h \
+		D:/ffmpeg-sdk/include/libswscale/version.h \
+		D:/ffmpeg-sdk/include/libswresample/swresample.h \
+		D:/ffmpeg-sdk/include/libswresample/version_major.h \
+		D:/ffmpeg-sdk/include/libswresample/version.h \
+		D:/SDL2-2.30.12/include/SDL.h \
+		D:/SDL2-2.30.12/include/SDL_main.h \
+		D:/SDL2-2.30.12/include/SDL_stdinc.h \
+		D:/SDL2-2.30.12/include/SDL_config.h \
+		D:/SDL2-2.30.12/include/SDL_platform.h \
+		D:/SDL2-2.30.12/include/begin_code.h \
+		D:/SDL2-2.30.12/include/close_code.h \
+		D:/SDL2-2.30.12/include/SDL_config_windows.h \
+		D:/SDL2-2.30.12/include/SDL_config_winrt.h \
+		D:/SDL2-2.30.12/include/SDL_config_wingdk.h \
+		D:/SDL2-2.30.12/include/SDL_config_xbox.h \
+		D:/SDL2-2.30.12/include/SDL_config_macosx.h \
+		D:/SDL2-2.30.12/include/SDL_config_iphoneos.h \
+		D:/SDL2-2.30.12/include/SDL_config_android.h \
+		D:/SDL2-2.30.12/include/SDL_config_os2.h \
+		D:/SDL2-2.30.12/include/SDL_config_emscripten.h \
+		D:/SDL2-2.30.12/include/SDL_config_ngage.h \
+		D:/SDL2-2.30.12/include/SDL_config_minimal.h \
+		D:/SDL2-2.30.12/include/SDL_assert.h \
+		D:/SDL2-2.30.12/include/SDL_atomic.h \
+		D:/SDL2-2.30.12/include/SDL_audio.h \
+		D:/SDL2-2.30.12/include/SDL_error.h \
+		D:/SDL2-2.30.12/include/SDL_endian.h \
+		D:/SDL2-2.30.12/include/SDL_mutex.h \
+		D:/SDL2-2.30.12/include/SDL_thread.h \
+		D:/SDL2-2.30.12/include/SDL_rwops.h \
+		D:/SDL2-2.30.12/include/SDL_clipboard.h \
+		D:/SDL2-2.30.12/include/SDL_cpuinfo.h \
+		D:/SDL2-2.30.12/include/SDL_events.h \
+		D:/SDL2-2.30.12/include/SDL_video.h \
+		D:/SDL2-2.30.12/include/SDL_pixels.h \
+		D:/SDL2-2.30.12/include/SDL_rect.h \
+		D:/SDL2-2.30.12/include/SDL_surface.h \
+		D:/SDL2-2.30.12/include/SDL_blendmode.h \
+		D:/SDL2-2.30.12/include/SDL_keyboard.h \
+		D:/SDL2-2.30.12/include/SDL_keycode.h \
+		D:/SDL2-2.30.12/include/SDL_scancode.h \
+		D:/SDL2-2.30.12/include/SDL_mouse.h \
+		D:/SDL2-2.30.12/include/SDL_joystick.h \
+		D:/SDL2-2.30.12/include/SDL_guid.h \
+		D:/SDL2-2.30.12/include/SDL_gamecontroller.h \
+		D:/SDL2-2.30.12/include/SDL_sensor.h \
+		D:/SDL2-2.30.12/include/SDL_quit.h \
+		D:/SDL2-2.30.12/include/SDL_gesture.h \
+		D:/SDL2-2.30.12/include/SDL_touch.h \
+		D:/SDL2-2.30.12/include/SDL_filesystem.h \
+		D:/SDL2-2.30.12/include/SDL_haptic.h \
+		D:/SDL2-2.30.12/include/SDL_hidapi.h \
+		D:/SDL2-2.30.12/include/SDL_hints.h \
+		D:/SDL2-2.30.12/include/SDL_loadso.h \
+		D:/SDL2-2.30.12/include/SDL_log.h \
+		D:/SDL2-2.30.12/include/SDL_messagebox.h \
+		D:/SDL2-2.30.12/include/SDL_metal.h \
+		D:/SDL2-2.30.12/include/SDL_power.h \
+		D:/SDL2-2.30.12/include/SDL_render.h \
+		D:/SDL2-2.30.12/include/SDL_shape.h \
+		D:/SDL2-2.30.12/include/SDL_system.h \
+		D:/SDL2-2.30.12/include/SDL_timer.h \
+		D:/SDL2-2.30.12/include/SDL_version.h \
+		D:/SDL2-2.30.12/include/SDL_locale.h \
+		D:/SDL2-2.30.12/include/SDL_misc.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ffplay_def.o ..\..\ffplay_def.cpp
+
+debug/ffplayer.o: ../../ffplayer.cpp ../../ffplayer.h \
+		../../ffmsg_queue.h \
+		D:/SDL2-2.30.12/include/SDL.h \
+		D:/SDL2-2.30.12/include/SDL_main.h \
+		D:/SDL2-2.30.12/include/SDL_stdinc.h \
+		D:/SDL2-2.30.12/include/SDL_config.h \
+		D:/SDL2-2.30.12/include/SDL_platform.h \
+		D:/SDL2-2.30.12/include/begin_code.h \
+		D:/SDL2-2.30.12/include/close_code.h \
+		D:/SDL2-2.30.12/include/SDL_config_windows.h \
+		D:/SDL2-2.30.12/include/SDL_config_winrt.h \
+		D:/SDL2-2.30.12/include/SDL_config_wingdk.h \
+		D:/SDL2-2.30.12/include/SDL_config_xbox.h \
+		D:/SDL2-2.30.12/include/SDL_config_macosx.h \
+		D:/SDL2-2.30.12/include/SDL_config_iphoneos.h \
+		D:/SDL2-2.30.12/include/SDL_config_android.h \
+		D:/SDL2-2.30.12/include/SDL_config_os2.h \
+		D:/SDL2-2.30.12/include/SDL_config_emscripten.h \
+		D:/SDL2-2.30.12/include/SDL_config_ngage.h \
+		D:/SDL2-2.30.12/include/SDL_config_minimal.h \
+		D:/SDL2-2.30.12/include/SDL_assert.h \
+		D:/SDL2-2.30.12/include/SDL_atomic.h \
+		D:/SDL2-2.30.12/include/SDL_audio.h \
+		D:/SDL2-2.30.12/include/SDL_error.h \
+		D:/SDL2-2.30.12/include/SDL_endian.h \
+		D:/SDL2-2.30.12/include/SDL_mutex.h \
+		D:/SDL2-2.30.12/include/SDL_thread.h \
+		D:/SDL2-2.30.12/include/SDL_rwops.h \
+		D:/SDL2-2.30.12/include/SDL_clipboard.h \
+		D:/SDL2-2.30.12/include/SDL_cpuinfo.h \
+		D:/SDL2-2.30.12/include/SDL_events.h \
+		D:/SDL2-2.30.12/include/SDL_video.h \
+		D:/SDL2-2.30.12/include/SDL_pixels.h \
+		D:/SDL2-2.30.12/include/SDL_rect.h \
+		D:/SDL2-2.30.12/include/SDL_surface.h \
+		D:/SDL2-2.30.12/include/SDL_blendmode.h \
+		D:/SDL2-2.30.12/include/SDL_keyboard.h \
+		D:/SDL2-2.30.12/include/SDL_keycode.h \
+		D:/SDL2-2.30.12/include/SDL_scancode.h \
+		D:/SDL2-2.30.12/include/SDL_mouse.h \
+		D:/SDL2-2.30.12/include/SDL_joystick.h \
+		D:/SDL2-2.30.12/include/SDL_guid.h \
+		D:/SDL2-2.30.12/include/SDL_gamecontroller.h \
+		D:/SDL2-2.30.12/include/SDL_sensor.h \
+		D:/SDL2-2.30.12/include/SDL_quit.h \
+		D:/SDL2-2.30.12/include/SDL_gesture.h \
+		D:/SDL2-2.30.12/include/SDL_touch.h \
+		D:/SDL2-2.30.12/include/SDL_filesystem.h \
+		D:/SDL2-2.30.12/include/SDL_haptic.h \
+		D:/SDL2-2.30.12/include/SDL_hidapi.h \
+		D:/SDL2-2.30.12/include/SDL_hints.h \
+		D:/SDL2-2.30.12/include/SDL_loadso.h \
+		D:/SDL2-2.30.12/include/SDL_log.h \
+		D:/SDL2-2.30.12/include/SDL_messagebox.h \
+		D:/SDL2-2.30.12/include/SDL_metal.h \
+		D:/SDL2-2.30.12/include/SDL_power.h \
+		D:/SDL2-2.30.12/include/SDL_render.h \
+		D:/SDL2-2.30.12/include/SDL_shape.h \
+		D:/SDL2-2.30.12/include/SDL_system.h \
+		D:/SDL2-2.30.12/include/SDL_timer.h \
+		D:/SDL2-2.30.12/include/SDL_version.h \
+		D:/SDL2-2.30.12/include/SDL_locale.h \
+		D:/SDL2-2.30.12/include/SDL_misc.h \
+		../../ffplay_def.h \
+		D:/ffmpeg-sdk/include/libavutil/avstring.h \
+		D:/ffmpeg-sdk/include/libavutil/attributes.h \
+		D:/ffmpeg-sdk/include/libavutil/eval.h \
+		D:/ffmpeg-sdk/include/libavutil/mathematics.h \
+		D:/ffmpeg-sdk/include/libavutil/rational.h \
+		D:/ffmpeg-sdk/include/libavutil/intfloat.h \
+		D:/ffmpeg-sdk/include/libavutil/pixdesc.h \
+		D:/ffmpeg-sdk/include/libavutil/pixfmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avconfig.h \
+		D:/ffmpeg-sdk/include/libavutil/version.h \
+		D:/ffmpeg-sdk/include/libavutil/macros.h \
+		D:/ffmpeg-sdk/include/libavutil/imgutils.h \
+		D:/ffmpeg-sdk/include/libavutil/dict.h \
+		D:/ffmpeg-sdk/include/libavutil/parseutils.h \
+		D:/ffmpeg-sdk/include/libavutil/samplefmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avassert.h \
+		D:/ffmpeg-sdk/include/libavutil/log.h \
+		D:/ffmpeg-sdk/include/libavutil/time.h \
+		D:/ffmpeg-sdk/include/libavformat/avformat.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_par.h \
+		D:/ffmpeg-sdk/include/libavutil/avutil.h \
+		D:/ffmpeg-sdk/include/libavutil/common.h \
+		D:/ffmpeg-sdk/include/libavutil/error.h \
+		D:/ffmpeg-sdk/include/libavutil/mem.h \
+		D:/ffmpeg-sdk/include/libavutil/channel_layout.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_id.h \
+		D:/ffmpeg-sdk/include/libavcodec/version_major.h \
+		D:/ffmpeg-sdk/include/libavcodec/defs.h \
+		D:/ffmpeg-sdk/include/libavcodec/packet.h \
+		D:/ffmpeg-sdk/include/libavutil/buffer.h \
+		D:/ffmpeg-sdk/include/libavformat/avio.h \
+		D:/ffmpeg-sdk/include/libavformat/version_major.h \
+		D:/ffmpeg-sdk/include/libavformat/version.h \
+		D:/ffmpeg-sdk/include/libavutil/frame.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec.h \
+		D:/ffmpeg-sdk/include/libavutil/hwcontext.h \
+		D:/ffmpeg-sdk/include/libavdevice/avdevice.h \
+		D:/ffmpeg-sdk/include/libavdevice/version_major.h \
+		D:/ffmpeg-sdk/include/libavdevice/version.h \
+		D:/ffmpeg-sdk/include/libavutil/opt.h \
+		D:/ffmpeg-sdk/include/libswscale/swscale.h \
+		D:/ffmpeg-sdk/include/libswscale/version_major.h \
+		D:/ffmpeg-sdk/include/libswscale/version.h \
+		D:/ffmpeg-sdk/include/libswresample/swresample.h \
+		D:/ffmpeg-sdk/include/libswresample/version_major.h \
+		D:/ffmpeg-sdk/include/libswresample/version.h \
+		../../ffmsg.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\ffplayer.o ..\..\ffplayer.cpp
 
 debug/main.o: ../../main.cpp ../../mainwind.h \
@@ -2309,6 +2646,118 @@ debug/main.o: ../../main.cpp ../../mainwind.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtGui/QTransform \
 		D:/software/qt/6.5.3/mingw_64/include/QtCore/qnativeinterface.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/qtabwidget.h \
+		../../mymediaplayer.h \
+		../../ffmsg_queue.h \
+		D:/SDL2-2.30.12/include/SDL.h \
+		D:/SDL2-2.30.12/include/SDL_main.h \
+		D:/SDL2-2.30.12/include/SDL_stdinc.h \
+		D:/SDL2-2.30.12/include/SDL_config.h \
+		D:/SDL2-2.30.12/include/SDL_platform.h \
+		D:/SDL2-2.30.12/include/begin_code.h \
+		D:/SDL2-2.30.12/include/close_code.h \
+		D:/SDL2-2.30.12/include/SDL_config_windows.h \
+		D:/SDL2-2.30.12/include/SDL_config_winrt.h \
+		D:/SDL2-2.30.12/include/SDL_config_wingdk.h \
+		D:/SDL2-2.30.12/include/SDL_config_xbox.h \
+		D:/SDL2-2.30.12/include/SDL_config_macosx.h \
+		D:/SDL2-2.30.12/include/SDL_config_iphoneos.h \
+		D:/SDL2-2.30.12/include/SDL_config_android.h \
+		D:/SDL2-2.30.12/include/SDL_config_os2.h \
+		D:/SDL2-2.30.12/include/SDL_config_emscripten.h \
+		D:/SDL2-2.30.12/include/SDL_config_ngage.h \
+		D:/SDL2-2.30.12/include/SDL_config_minimal.h \
+		D:/SDL2-2.30.12/include/SDL_assert.h \
+		D:/SDL2-2.30.12/include/SDL_atomic.h \
+		D:/SDL2-2.30.12/include/SDL_audio.h \
+		D:/SDL2-2.30.12/include/SDL_error.h \
+		D:/SDL2-2.30.12/include/SDL_endian.h \
+		D:/SDL2-2.30.12/include/SDL_mutex.h \
+		D:/SDL2-2.30.12/include/SDL_thread.h \
+		D:/SDL2-2.30.12/include/SDL_rwops.h \
+		D:/SDL2-2.30.12/include/SDL_clipboard.h \
+		D:/SDL2-2.30.12/include/SDL_cpuinfo.h \
+		D:/SDL2-2.30.12/include/SDL_events.h \
+		D:/SDL2-2.30.12/include/SDL_video.h \
+		D:/SDL2-2.30.12/include/SDL_pixels.h \
+		D:/SDL2-2.30.12/include/SDL_rect.h \
+		D:/SDL2-2.30.12/include/SDL_surface.h \
+		D:/SDL2-2.30.12/include/SDL_blendmode.h \
+		D:/SDL2-2.30.12/include/SDL_keyboard.h \
+		D:/SDL2-2.30.12/include/SDL_keycode.h \
+		D:/SDL2-2.30.12/include/SDL_scancode.h \
+		D:/SDL2-2.30.12/include/SDL_mouse.h \
+		D:/SDL2-2.30.12/include/SDL_joystick.h \
+		D:/SDL2-2.30.12/include/SDL_guid.h \
+		D:/SDL2-2.30.12/include/SDL_gamecontroller.h \
+		D:/SDL2-2.30.12/include/SDL_sensor.h \
+		D:/SDL2-2.30.12/include/SDL_quit.h \
+		D:/SDL2-2.30.12/include/SDL_gesture.h \
+		D:/SDL2-2.30.12/include/SDL_touch.h \
+		D:/SDL2-2.30.12/include/SDL_filesystem.h \
+		D:/SDL2-2.30.12/include/SDL_haptic.h \
+		D:/SDL2-2.30.12/include/SDL_hidapi.h \
+		D:/SDL2-2.30.12/include/SDL_hints.h \
+		D:/SDL2-2.30.12/include/SDL_loadso.h \
+		D:/SDL2-2.30.12/include/SDL_log.h \
+		D:/SDL2-2.30.12/include/SDL_messagebox.h \
+		D:/SDL2-2.30.12/include/SDL_metal.h \
+		D:/SDL2-2.30.12/include/SDL_power.h \
+		D:/SDL2-2.30.12/include/SDL_render.h \
+		D:/SDL2-2.30.12/include/SDL_shape.h \
+		D:/SDL2-2.30.12/include/SDL_system.h \
+		D:/SDL2-2.30.12/include/SDL_timer.h \
+		D:/SDL2-2.30.12/include/SDL_version.h \
+		D:/SDL2-2.30.12/include/SDL_locale.h \
+		D:/SDL2-2.30.12/include/SDL_misc.h \
+		../../ffmsg.h \
+		../../ffplayer.h \
+		../../ffplay_def.h \
+		D:/ffmpeg-sdk/include/libavutil/avstring.h \
+		D:/ffmpeg-sdk/include/libavutil/attributes.h \
+		D:/ffmpeg-sdk/include/libavutil/eval.h \
+		D:/ffmpeg-sdk/include/libavutil/mathematics.h \
+		D:/ffmpeg-sdk/include/libavutil/rational.h \
+		D:/ffmpeg-sdk/include/libavutil/intfloat.h \
+		D:/ffmpeg-sdk/include/libavutil/pixdesc.h \
+		D:/ffmpeg-sdk/include/libavutil/pixfmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avconfig.h \
+		D:/ffmpeg-sdk/include/libavutil/version.h \
+		D:/ffmpeg-sdk/include/libavutil/macros.h \
+		D:/ffmpeg-sdk/include/libavutil/imgutils.h \
+		D:/ffmpeg-sdk/include/libavutil/dict.h \
+		D:/ffmpeg-sdk/include/libavutil/parseutils.h \
+		D:/ffmpeg-sdk/include/libavutil/samplefmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avassert.h \
+		D:/ffmpeg-sdk/include/libavutil/log.h \
+		D:/ffmpeg-sdk/include/libavutil/time.h \
+		D:/ffmpeg-sdk/include/libavformat/avformat.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_par.h \
+		D:/ffmpeg-sdk/include/libavutil/avutil.h \
+		D:/ffmpeg-sdk/include/libavutil/common.h \
+		D:/ffmpeg-sdk/include/libavutil/error.h \
+		D:/ffmpeg-sdk/include/libavutil/mem.h \
+		D:/ffmpeg-sdk/include/libavutil/channel_layout.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_id.h \
+		D:/ffmpeg-sdk/include/libavcodec/version_major.h \
+		D:/ffmpeg-sdk/include/libavcodec/defs.h \
+		D:/ffmpeg-sdk/include/libavcodec/packet.h \
+		D:/ffmpeg-sdk/include/libavutil/buffer.h \
+		D:/ffmpeg-sdk/include/libavformat/avio.h \
+		D:/ffmpeg-sdk/include/libavformat/version_major.h \
+		D:/ffmpeg-sdk/include/libavformat/version.h \
+		D:/ffmpeg-sdk/include/libavutil/frame.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec.h \
+		D:/ffmpeg-sdk/include/libavutil/hwcontext.h \
+		D:/ffmpeg-sdk/include/libavdevice/avdevice.h \
+		D:/ffmpeg-sdk/include/libavdevice/version_major.h \
+		D:/ffmpeg-sdk/include/libavdevice/version.h \
+		D:/ffmpeg-sdk/include/libavutil/opt.h \
+		D:/ffmpeg-sdk/include/libswscale/swscale.h \
+		D:/ffmpeg-sdk/include/libswscale/version_major.h \
+		D:/ffmpeg-sdk/include/libswscale/version.h \
+		D:/ffmpeg-sdk/include/libswresample/swresample.h \
+		D:/ffmpeg-sdk/include/libswresample/version_major.h \
+		D:/ffmpeg-sdk/include/libswresample/version.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/QApplication \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/qapplication.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtCore/qcoreapplication.h \
@@ -2493,6 +2942,118 @@ debug/mainwind.o: ../../mainwind.cpp ../../mainwind.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtGui/QTransform \
 		D:/software/qt/6.5.3/mingw_64/include/QtCore/qnativeinterface.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/qtabwidget.h \
+		../../mymediaplayer.h \
+		../../ffmsg_queue.h \
+		D:/SDL2-2.30.12/include/SDL.h \
+		D:/SDL2-2.30.12/include/SDL_main.h \
+		D:/SDL2-2.30.12/include/SDL_stdinc.h \
+		D:/SDL2-2.30.12/include/SDL_config.h \
+		D:/SDL2-2.30.12/include/SDL_platform.h \
+		D:/SDL2-2.30.12/include/begin_code.h \
+		D:/SDL2-2.30.12/include/close_code.h \
+		D:/SDL2-2.30.12/include/SDL_config_windows.h \
+		D:/SDL2-2.30.12/include/SDL_config_winrt.h \
+		D:/SDL2-2.30.12/include/SDL_config_wingdk.h \
+		D:/SDL2-2.30.12/include/SDL_config_xbox.h \
+		D:/SDL2-2.30.12/include/SDL_config_macosx.h \
+		D:/SDL2-2.30.12/include/SDL_config_iphoneos.h \
+		D:/SDL2-2.30.12/include/SDL_config_android.h \
+		D:/SDL2-2.30.12/include/SDL_config_os2.h \
+		D:/SDL2-2.30.12/include/SDL_config_emscripten.h \
+		D:/SDL2-2.30.12/include/SDL_config_ngage.h \
+		D:/SDL2-2.30.12/include/SDL_config_minimal.h \
+		D:/SDL2-2.30.12/include/SDL_assert.h \
+		D:/SDL2-2.30.12/include/SDL_atomic.h \
+		D:/SDL2-2.30.12/include/SDL_audio.h \
+		D:/SDL2-2.30.12/include/SDL_error.h \
+		D:/SDL2-2.30.12/include/SDL_endian.h \
+		D:/SDL2-2.30.12/include/SDL_mutex.h \
+		D:/SDL2-2.30.12/include/SDL_thread.h \
+		D:/SDL2-2.30.12/include/SDL_rwops.h \
+		D:/SDL2-2.30.12/include/SDL_clipboard.h \
+		D:/SDL2-2.30.12/include/SDL_cpuinfo.h \
+		D:/SDL2-2.30.12/include/SDL_events.h \
+		D:/SDL2-2.30.12/include/SDL_video.h \
+		D:/SDL2-2.30.12/include/SDL_pixels.h \
+		D:/SDL2-2.30.12/include/SDL_rect.h \
+		D:/SDL2-2.30.12/include/SDL_surface.h \
+		D:/SDL2-2.30.12/include/SDL_blendmode.h \
+		D:/SDL2-2.30.12/include/SDL_keyboard.h \
+		D:/SDL2-2.30.12/include/SDL_keycode.h \
+		D:/SDL2-2.30.12/include/SDL_scancode.h \
+		D:/SDL2-2.30.12/include/SDL_mouse.h \
+		D:/SDL2-2.30.12/include/SDL_joystick.h \
+		D:/SDL2-2.30.12/include/SDL_guid.h \
+		D:/SDL2-2.30.12/include/SDL_gamecontroller.h \
+		D:/SDL2-2.30.12/include/SDL_sensor.h \
+		D:/SDL2-2.30.12/include/SDL_quit.h \
+		D:/SDL2-2.30.12/include/SDL_gesture.h \
+		D:/SDL2-2.30.12/include/SDL_touch.h \
+		D:/SDL2-2.30.12/include/SDL_filesystem.h \
+		D:/SDL2-2.30.12/include/SDL_haptic.h \
+		D:/SDL2-2.30.12/include/SDL_hidapi.h \
+		D:/SDL2-2.30.12/include/SDL_hints.h \
+		D:/SDL2-2.30.12/include/SDL_loadso.h \
+		D:/SDL2-2.30.12/include/SDL_log.h \
+		D:/SDL2-2.30.12/include/SDL_messagebox.h \
+		D:/SDL2-2.30.12/include/SDL_metal.h \
+		D:/SDL2-2.30.12/include/SDL_power.h \
+		D:/SDL2-2.30.12/include/SDL_render.h \
+		D:/SDL2-2.30.12/include/SDL_shape.h \
+		D:/SDL2-2.30.12/include/SDL_system.h \
+		D:/SDL2-2.30.12/include/SDL_timer.h \
+		D:/SDL2-2.30.12/include/SDL_version.h \
+		D:/SDL2-2.30.12/include/SDL_locale.h \
+		D:/SDL2-2.30.12/include/SDL_misc.h \
+		../../ffmsg.h \
+		../../ffplayer.h \
+		../../ffplay_def.h \
+		D:/ffmpeg-sdk/include/libavutil/avstring.h \
+		D:/ffmpeg-sdk/include/libavutil/attributes.h \
+		D:/ffmpeg-sdk/include/libavutil/eval.h \
+		D:/ffmpeg-sdk/include/libavutil/mathematics.h \
+		D:/ffmpeg-sdk/include/libavutil/rational.h \
+		D:/ffmpeg-sdk/include/libavutil/intfloat.h \
+		D:/ffmpeg-sdk/include/libavutil/pixdesc.h \
+		D:/ffmpeg-sdk/include/libavutil/pixfmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avconfig.h \
+		D:/ffmpeg-sdk/include/libavutil/version.h \
+		D:/ffmpeg-sdk/include/libavutil/macros.h \
+		D:/ffmpeg-sdk/include/libavutil/imgutils.h \
+		D:/ffmpeg-sdk/include/libavutil/dict.h \
+		D:/ffmpeg-sdk/include/libavutil/parseutils.h \
+		D:/ffmpeg-sdk/include/libavutil/samplefmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avassert.h \
+		D:/ffmpeg-sdk/include/libavutil/log.h \
+		D:/ffmpeg-sdk/include/libavutil/time.h \
+		D:/ffmpeg-sdk/include/libavformat/avformat.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_par.h \
+		D:/ffmpeg-sdk/include/libavutil/avutil.h \
+		D:/ffmpeg-sdk/include/libavutil/common.h \
+		D:/ffmpeg-sdk/include/libavutil/error.h \
+		D:/ffmpeg-sdk/include/libavutil/mem.h \
+		D:/ffmpeg-sdk/include/libavutil/channel_layout.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_id.h \
+		D:/ffmpeg-sdk/include/libavcodec/version_major.h \
+		D:/ffmpeg-sdk/include/libavcodec/defs.h \
+		D:/ffmpeg-sdk/include/libavcodec/packet.h \
+		D:/ffmpeg-sdk/include/libavutil/buffer.h \
+		D:/ffmpeg-sdk/include/libavformat/avio.h \
+		D:/ffmpeg-sdk/include/libavformat/version_major.h \
+		D:/ffmpeg-sdk/include/libavformat/version.h \
+		D:/ffmpeg-sdk/include/libavutil/frame.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec.h \
+		D:/ffmpeg-sdk/include/libavutil/hwcontext.h \
+		D:/ffmpeg-sdk/include/libavdevice/avdevice.h \
+		D:/ffmpeg-sdk/include/libavdevice/version_major.h \
+		D:/ffmpeg-sdk/include/libavdevice/version.h \
+		D:/ffmpeg-sdk/include/libavutil/opt.h \
+		D:/ffmpeg-sdk/include/libswscale/swscale.h \
+		D:/ffmpeg-sdk/include/libswscale/version_major.h \
+		D:/ffmpeg-sdk/include/libswscale/version.h \
+		D:/ffmpeg-sdk/include/libswresample/swresample.h \
+		D:/ffmpeg-sdk/include/libswresample/version_major.h \
+		D:/ffmpeg-sdk/include/libswresample/version.h \
 		ui_mainwind.h \
 		D:/software/qt/6.5.3/mingw_64/include/QtCore/QVariant \
 		D:/software/qt/6.5.3/mingw_64/include/QtWidgets/QApplication \
@@ -2600,7 +3161,54 @@ debug/mymediaplayer.o: ../../mymediaplayer.cpp ../../mymediaplayer.h \
 		D:/SDL2-2.30.12/include/SDL_locale.h \
 		D:/SDL2-2.30.12/include/SDL_misc.h \
 		../../ffmsg.h \
-		../../ffplayer.h
+		../../ffplayer.h \
+		../../ffplay_def.h \
+		D:/ffmpeg-sdk/include/libavutil/avstring.h \
+		D:/ffmpeg-sdk/include/libavutil/attributes.h \
+		D:/ffmpeg-sdk/include/libavutil/eval.h \
+		D:/ffmpeg-sdk/include/libavutil/mathematics.h \
+		D:/ffmpeg-sdk/include/libavutil/rational.h \
+		D:/ffmpeg-sdk/include/libavutil/intfloat.h \
+		D:/ffmpeg-sdk/include/libavutil/pixdesc.h \
+		D:/ffmpeg-sdk/include/libavutil/pixfmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avconfig.h \
+		D:/ffmpeg-sdk/include/libavutil/version.h \
+		D:/ffmpeg-sdk/include/libavutil/macros.h \
+		D:/ffmpeg-sdk/include/libavutil/imgutils.h \
+		D:/ffmpeg-sdk/include/libavutil/dict.h \
+		D:/ffmpeg-sdk/include/libavutil/parseutils.h \
+		D:/ffmpeg-sdk/include/libavutil/samplefmt.h \
+		D:/ffmpeg-sdk/include/libavutil/avassert.h \
+		D:/ffmpeg-sdk/include/libavutil/log.h \
+		D:/ffmpeg-sdk/include/libavutil/time.h \
+		D:/ffmpeg-sdk/include/libavformat/avformat.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_par.h \
+		D:/ffmpeg-sdk/include/libavutil/avutil.h \
+		D:/ffmpeg-sdk/include/libavutil/common.h \
+		D:/ffmpeg-sdk/include/libavutil/error.h \
+		D:/ffmpeg-sdk/include/libavutil/mem.h \
+		D:/ffmpeg-sdk/include/libavutil/channel_layout.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec_id.h \
+		D:/ffmpeg-sdk/include/libavcodec/version_major.h \
+		D:/ffmpeg-sdk/include/libavcodec/defs.h \
+		D:/ffmpeg-sdk/include/libavcodec/packet.h \
+		D:/ffmpeg-sdk/include/libavutil/buffer.h \
+		D:/ffmpeg-sdk/include/libavformat/avio.h \
+		D:/ffmpeg-sdk/include/libavformat/version_major.h \
+		D:/ffmpeg-sdk/include/libavformat/version.h \
+		D:/ffmpeg-sdk/include/libavutil/frame.h \
+		D:/ffmpeg-sdk/include/libavcodec/codec.h \
+		D:/ffmpeg-sdk/include/libavutil/hwcontext.h \
+		D:/ffmpeg-sdk/include/libavdevice/avdevice.h \
+		D:/ffmpeg-sdk/include/libavdevice/version_major.h \
+		D:/ffmpeg-sdk/include/libavdevice/version.h \
+		D:/ffmpeg-sdk/include/libavutil/opt.h \
+		D:/ffmpeg-sdk/include/libswscale/swscale.h \
+		D:/ffmpeg-sdk/include/libswscale/version_major.h \
+		D:/ffmpeg-sdk/include/libswscale/version.h \
+		D:/ffmpeg-sdk/include/libswresample/swresample.h \
+		D:/ffmpeg-sdk/include/libswresample/version_major.h \
+		D:/ffmpeg-sdk/include/libswresample/version.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mymediaplayer.o ..\..\mymediaplayer.cpp
 
 debug/playlistwind.o: ../../playlistwind.cpp ../../playlistwind.h \
