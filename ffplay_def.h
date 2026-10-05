@@ -21,6 +21,7 @@ extern "C" {
 #include "libavdevice/avdevice.h"
 #include "libswscale/swscale.h"
 #include "libavutil/opt.h"
+#include <libavcodec/avcodec.h>
 #include "libswresample/swresample.h"
 #include <SDL.h>
 #include <SDL_thread.h>

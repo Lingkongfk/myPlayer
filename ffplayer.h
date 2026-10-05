@@ -42,8 +42,13 @@ public:
     PacketQueue videoq; //视频包队列
     int abort_request = 0;
 
+    AVStream* audio_st = NULL;//音频流
+    AVStream* video_st = NULL;//视频流
     int audio_stream = -1;
     int video_stream = -1;
+
+    int eof = 0;
+    AVFormatContext* ic = NULL;
 };
 
 //内联函数，封装消息队列的几种插入消息方法
