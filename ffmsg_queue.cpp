@@ -75,8 +75,9 @@ int msg_queue_get(MessageQueue *q, AVMessage *msg, int block)
 {
     AVMessage* msg1;
     int ret;
-    std::unique_lock<std::mutex> lock(q->mutex);
+
     for(;;){
+        std::unique_lock<std::mutex> lock(q->mutex);
         if(q->abort_request){
             ret = -1;
             break;

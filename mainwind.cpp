@@ -42,7 +42,7 @@ int MainWind::message_loop(void *arg)
         //销毁msg
         msg_free_res(&msg);
         //使用sleep模拟线程运行
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     qDebug() << "message_loop leave";
 }
@@ -64,7 +64,7 @@ void MainWind::OnPlayOrPause()
             return ;
         }
 
-        mp_->set_data_source("2_audio.mp4");//暂时先用着
+        mp_->set_data_source("D:/learnVideo/longtest.mp4");//暂时先用着
 
         //创建播放器成功后，启动准备
         ret = mp_->prepare_async();

@@ -49,6 +49,14 @@ enum RET_CODE
     RET_ERR_EOF
 };
 
+typedef struct AudioParams{
+    int freq;//采样率
+    AVChannelLayout channels; //通道布局
+    enum AVSampleFormat fmt;//采样格式
+    int frame_size; //一个采样的大小
+    int bytes_per_sec; //每秒字节数
+} AudioParams;
+
 
 typedef struct MyAVPacketList{
     AVPacket pkt;               //解封装后的包数据

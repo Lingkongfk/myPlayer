@@ -5,6 +5,37 @@
 #include <thread>
 #include "ffplay_def.h"
 
+
+//解码器
+class Decoder{
+public:
+    AVPacket pkt_;
+    PacketQueue *queue_;
+    AVCodecContext* avctx_;
+    int pkt_serial_;
+    int finished_;
+    std::thread *decoder_thread_ = NULL;
+
+    Decoder();
+    ~Decoder();
+    void decoder_init(AVCodecContext* avctx, PacketQueue* queue);
+    int decoder_start(enum AVMediaType codec_type, const char* thread_name, void* arg);
+    void decoder_abort(FrameQueue* fq);
+    void decoder_destory();
+    //解码的核心
+    int decoder_decode_frame(AVFrame* frame);
+    int get_video_frame(AVFrame* frame);
+    int queue_picture(FrameQueue* fq, AVFrame* src_frame, double pts,
+                      double duration, int64_t pos, int serial);
+    //音频解码函数
+    int audio_thread(void* arg);
+    //视频解码函数
+    int video_thread(void* arg);
+
+
+
+};
+
 class FFPlayer
 {
 public:
@@ -22,6 +53,12 @@ public:
     int stream_component_open(int stream_index);
     //关闭指定流的解码线程
     void stream_component_close(int stream_index);
+
+    //音频函数
+    int audio_open(AVChannelLayout wanted_channel_layout, int wanted_nb_channels, int wanted_sample_rate, struct AudioParams* audio_hw_params);
+    //关闭音频函数
+    void audio_close();
+
 
     //读取线程
     int read_thread();
@@ -47,8 +84,24 @@ public:
     int audio_stream = -1;
     int video_stream = -1;
 
+    Decoder auddec; //音频解码器
+    Decoder viddec; //视频解码器
+
     int eof = 0;
     AVFormatContext* ic = NULL;
+
+    //音频相关成员
+    struct AudioParams audio_src;//解码后的frame参数
+    struct AudioParams audio_tgt;//SDL支持的音频参数
+    struct SwrContext* swr_ctx = nullptr;//音频重采样context
+    int audio_hw_buf_size = 0; //SDL缓冲区大小
+    uint8_t *audio_buf = NULL; //指向需要重采样的数据
+    uint8_t *audio_buf1 = NULL;//指向重采样后的数据
+    unsigned int audio_buf_size = 0;
+    unsigned int audio_buf1_size = 0;
+    int audio_buf_index = 0; //更新拷贝位置
+
+
 };
 
 //内联函数，封装消息队列的几种插入消息方法
