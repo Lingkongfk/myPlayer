@@ -64,6 +64,9 @@ int FFPlayer::stream_open(const char *file_name)
 
 
     read_thread_ = new std::thread(&FFPlayer::read_thread, this);
+
+    video_refresh_thread_ = new std::thread(FFPlayer::video_refresh_thread, this);
+
     return 0;
 fail:
     stream_close();
@@ -147,6 +150,8 @@ int FFPlayer::stream_component_open(int stream_index)
 
         //启动解码器线程
         //运行音频输出
+        qDebug() << "audio thread start";
+
         auddec.decoder_init(avctx, &audioq);
         auddec.decoder_start(AVMEDIA_TYPE_AUDIO, "audio_thread", this);
         // 允许音频输出
@@ -160,13 +165,13 @@ int FFPlayer::stream_component_open(int stream_index)
 
         //初始化ffplay的解码器
         //启动解码线程
-
+        qDebug() << "video thread init";
         viddec.decoder_init(avctx, &videoq); //  is->continue_read_thread
         //        // 启动视频频解码线程
+        qDebug() << "video thread start";
         if ((ret = viddec.decoder_start(AVMEDIA_TYPE_VIDEO, "video_decoder", this)) < 0)
             goto out;
-        break;
-
+        qDebug() << "video thread back";
         break;
     default:
         break;
@@ -191,11 +196,17 @@ void FFPlayer::stream_component_close(int stream_index)
     case AVMEDIA_TYPE_AUDIO:
         std::cout << __FUNCTION__ << "  AVMEDIA_TYPE_AUDIO\n";
         // 请求终止解码器线程
+        auddec.decoder_abort(&sampq);
         // 关闭音频设备
+        audio_close();
         // 销毁解码器
-
+        auddec.decoder_destory();
         // 释放重采样器
+        swr_free(&swr_ctx);
         // 释放audio buf
+        av_freep(&audio_buf1);
+        audio_buf1_size = 0;
+        audio_buf = NULL;
         //        decoder_abort(&is->auddec, &is->sampq); // 解码器线程请求abort的时候有调用 packet_queue_abort
         //        SDL_CloseAudioDevice(audio_dev);
         //        decoder_destroy(&is->auddec);
@@ -206,12 +217,17 @@ void FFPlayer::stream_component_close(int stream_index)
         break;
     case AVMEDIA_TYPE_VIDEO:
         std::cout << __FUNCTION__ << "  AVMEDIA_TYPE_VIDEO\n";
+        // 请求终止画面刷新线程
+        if(video_refresh_thread_ && video_refresh_thread_->joinable()) {
+            video_refresh_thread_->join();  // 等待线程退出
+        }
+
+        std::cout << __FUNCTION__ << "  AVMEDIA_TYPE_VIDEO\n";
         // 请求终止解码器线程
         // 关闭音频设备
         // 销毁解码器
-        //        decoder_abort(&is->viddec, &is->pictq);
-        //        decoder_destroy(&is->viddec);
-        break;
+        viddec.decoder_abort(&pictq);
+        viddec.decoder_destory();
 
     default:
         break;
@@ -325,7 +341,11 @@ int FFPlayer::read_thread()
         if(pkt->stream_index == audio_stream){
             printf("audio ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
             packet_queue_put(&audioq, pkt);
-        }else{
+        }else if(pkt->stream_index == video_stream){
+            printf("video ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
+            packet_queue_put(&videoq, pkt);
+        }
+        else{
             av_packet_unref(pkt);
         }
     }
@@ -767,5 +787,50 @@ int FFPlayer::audio_open(AVChannelLayout wanted_channel_layout, int wanted_nb_ch
 void FFPlayer::audio_close()
 {
     SDL_CloseAudio();
+}
+
+
+
+void FFPlayer::AddVideoRefreshCallback(std::function<int (const Frame *)> callback)
+{
+    video_refresh_callback_ = callback;
+}
+
+#define REFRESH_RATE 0.04  // 每帧休眠10ms
+
+int FFPlayer::video_refresh_thread()
+{
+    double remaining_time = 0.0;
+    while(!abort_request){
+        if(remaining_time > 0.0)
+            av_usleep((int)(int64_t)(remaining_time * 1000000.0));
+        remaining_time = REFRESH_RATE;
+        video_refresh(&remaining_time);
+    }
+}
+
+
+
+void FFPlayer::video_refresh(double *remaining_time)
+{
+    Frame *vp = NULL;
+    // 目前我们先是只有队列里面有视频帧可以播放，就先播放出来
+    // 判断有没有视频画面
+    if(video_st) {
+        if (frame_queue_nb_remaining(&pictq) == 0) {
+            // 什么都不用做，可以直接退出了
+            return;
+        }
+
+        // 能跑到这里说明帧队列不为空，肯定有frame可以读取
+        vp = frame_queue_peek(&pictq);  // 读取待显示帧
+        // 刷新显示
+        if(video_refresh_callback_)
+            video_refresh_callback_(vp);
+        else
+            std::cout << __FUNCTION__ << " video_refresh_callback_ NULL" << std::endl;
+
+        frame_queue_next(&pictq);   // 当前vp帧出队列
+    }
 }
 

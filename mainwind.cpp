@@ -63,8 +63,10 @@ void MainWind::OnPlayOrPause()
             mp_ = NULL;
             return ;
         }
+        mp_->AddVideoRefreshCallback(std::bind(&MainWind::outputVideo, this,
+                                               std::placeholders::_1));
 
-        mp_->set_data_source("D:/learnVideo/longtest.mp4");//暂时先用着
+        mp_->set_data_source("D:/learnVideo/test.mp4");//暂时先用着
 
         //创建播放器成功后，启动准备
         ret = mp_->prepare_async();
@@ -88,4 +90,9 @@ void MainWind::OnStop()
         delete mp_;
         mp_ = NULL;
     }
+}
+
+int MainWind::outputVideo(const Frame *frame)
+{
+    return ui->showWidget->Draw(frame);
 }

@@ -4,6 +4,7 @@
 #include <ffmsg_queue.h>
 #include <thread>
 #include "ffplay_def.h"
+#include <functional>
 
 
 //解码器
@@ -58,6 +59,13 @@ public:
     int audio_open(AVChannelLayout wanted_channel_layout, int wanted_nb_channels, int wanted_sample_rate, struct AudioParams* audio_hw_params);
     //关闭音频函数
     void audio_close();
+
+    //视频刷新线程
+    std::thread* video_refresh_thread_ = NULL;
+    std::function<int(const Frame*)> video_refresh_callback_ = NULL;
+    void AddVideoRefreshCallback(std::function<int(const Frame*)> callback);
+    int video_refresh_thread();
+    void video_refresh(double *remaining_time);
 
 
     //读取线程

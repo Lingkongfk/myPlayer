@@ -53,6 +53,8 @@ public:
     //调用UI处理循环函数的函数，该函数本身会是一个线程
     int msg_loop(void* arg);
 
+    void AddVideoRefreshCallback(std::function<int(const Frame *)> callback);
+
 private:
     std::mutex mutex_;         //线程安全互斥量
     FFPlayer* ffplayer_ = NULL;//ffplayer的指针

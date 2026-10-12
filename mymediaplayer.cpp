@@ -123,3 +123,8 @@ int MyMediaPlayer::msg_loop(void *arg)
     msg_loop_(arg);
     return 0;
 }
+
+void MyMediaPlayer::AddVideoRefreshCallback(std::function<int (const Frame *)> callback)
+{
+    ffplayer_->AddVideoRefreshCallback(callback);
+}
