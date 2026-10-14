@@ -62,6 +62,9 @@ int FFPlayer::stream_open(const char *file_name)
         packet_queue_init(&audioq) < 0 )
         goto fail;
 
+    //初始化时钟
+    init_clock(&audclk);
+
 
     read_thread_ = new std::thread(&FFPlayer::read_thread, this);
 
@@ -117,7 +120,7 @@ int FFPlayer::stream_component_open(int stream_index)
     if(ret < 0){
         goto fail;
     }
-
+    avctx->pkt_timebase = ic->streams[stream_index]->time_base;
     codec = avcodec_find_decoder(avctx->codec_id);
     if(!codec){
         av_log(NULL, AV_LOG_WARNING,
@@ -700,6 +703,13 @@ static int audio_decode_frame(FFPlayer* is){
         is->audio_buf = af->frame->data[0];
         resampled_data_size = data_size;
     }
+
+    if(!isnan(af->pts)){
+        is->audio_clock = af->pts;
+    }else{
+        is->audio_clock = NAN;
+    }
+
     frame_queue_next(&is->sampq);
     ret = resampled_data_size;
 
@@ -743,6 +753,10 @@ static void sdl_audio_callback(void* opaque, uint8_t* stream, int len){
         is->audio_buf_index += len1;
 
 
+    }
+
+    if(!isnan(is->audio_clock)){
+        set_clock(&is->audclk, is->audio_clock);
     }
 }
 
@@ -796,7 +810,7 @@ void FFPlayer::AddVideoRefreshCallback(std::function<int (const Frame *)> callba
     video_refresh_callback_ = callback;
 }
 
-#define REFRESH_RATE 0.04  // 每帧休眠10ms
+#define REFRESH_RATE 0.01  // 每帧休眠10ms
 
 int FFPlayer::video_refresh_thread()
 {
@@ -824,6 +838,15 @@ void FFPlayer::video_refresh(double *remaining_time)
 
         // 能跑到这里说明帧队列不为空，肯定有frame可以读取
         vp = frame_queue_peek(&pictq);  // 读取待显示帧
+
+        //对比audio的时间戳
+        double diff = vp->pts - get_clock(&audclk);
+        //std::cout << __FUNCTION__ << "vp->pts:" << vp->pts << "-af->pts:" << get_clock(&audclk) << ", diff:" << diff << std::endl;
+        if(diff > 0.1){
+            *remaining_time = FFMIN(*remaining_time, diff);
+            return ;
+        }
+
         // 刷新显示
         if(video_refresh_callback_)
             video_refresh_callback_(vp);
@@ -834,3 +857,37 @@ void FFPlayer::video_refresh(double *remaining_time)
     }
 }
 
+int FFPlayer::get_master_sync_type()
+{
+    if (av_sync_type == AV_SYNC_VIDEO_MASTER) {
+        if (video_st)
+            return AV_SYNC_VIDEO_MASTER;
+        else
+            return AV_SYNC_AUDIO_MASTER;	 /* 如果没有视频成分则使用 audio master */
+    } else if (av_sync_type == AV_SYNC_AUDIO_MASTER) {
+        if (audio_st)
+            return AV_SYNC_AUDIO_MASTER;
+        else if(video_st)
+            return AV_SYNC_VIDEO_MASTER;        // 只有音频的存在
+        else
+            return AV_SYNC_UNKNOW_MASTER;
+    }
+}
+
+double FFPlayer::get_master_clock()
+{
+    double val;
+
+    switch (get_master_sync_type()) {
+    case AV_SYNC_VIDEO_MASTER:
+        //        val = get_clock(&vidclk);
+        break;
+    case AV_SYNC_AUDIO_MASTER:
+        val = get_clock(&audclk);
+        break;
+    default:
+        val = get_clock(&audclk);
+        break;
+    }
+    return val;
+}

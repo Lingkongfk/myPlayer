@@ -109,6 +109,11 @@ public:
     unsigned int audio_buf1_size = 0;
     int audio_buf_index = 0; //更新拷贝位置
 
+    int get_master_sync_type();
+    double get_master_clock();
+    int av_sync_type = AV_SYNC_AUDIO_MASTER;
+    Clock audclk;
+    double audio_clock = 0;//当前pts + duration
 
 };
 

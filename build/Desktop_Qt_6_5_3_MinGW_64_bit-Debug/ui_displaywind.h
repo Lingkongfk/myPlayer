@@ -46,7 +46,7 @@ public:
     void retranslateUi(QWidget *DisplayWind)
     {
         DisplayWind->setWindowTitle(QCoreApplication::translate("DisplayWind", "Form", nullptr));
-        label->setText(QCoreApplication::translate("DisplayWind", "\350\247\206\351\242\221\347\224\273\351\235\242", nullptr));
+        label->setText(QString());
     } // retranslateUi
 
 };

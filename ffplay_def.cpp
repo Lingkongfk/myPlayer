@@ -316,3 +316,24 @@ int64_t frame_queue_last_pos(FrameQueue *f)
     //    else
     return -1;
 }
+
+
+double get_clock(Clock* c){
+    double time = av_gettime_relative() / 1000000.0; //微妙为单位，除以10^6换算成秒
+    return c->pts_drift + time; //当前的系统时间轴时间
+}
+
+void set_clock_at(Clock* c, double pts, double time){
+    c->pts = pts;
+    c->last_updated = time;
+    c->pts_drift = pts - time;
+}
+
+void set_clock(Clock* c, double pts){
+    double time = av_gettime_relative() / 1000000.0;
+    set_clock_at(c, pts, time);
+}
+
+void init_clock(Clock* c){
+    set_clock(c, NAN);
+}
