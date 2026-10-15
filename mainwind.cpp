@@ -66,7 +66,7 @@ void MainWind::OnPlayOrPause()
         mp_->AddVideoRefreshCallback(std::bind(&MainWind::outputVideo, this,
                                                std::placeholders::_1));
 
-        mp_->set_data_source("D:/learnVideo/test.mp4");//暂时先用着
+        mp_->set_data_source("D:/learnVideo/test_1920x1080.mp4");//暂时先用着
 
         //创建播放器成功后，启动准备
         ret = mp_->prepare_async();
@@ -78,6 +78,8 @@ void MainWind::OnPlayOrPause()
         }
     }else{
         //播放器已经有了，这里就是暂停或者恢复播放了
+
+
     }
 }
 

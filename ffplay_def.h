@@ -104,6 +104,8 @@ typedef struct FrameQueue {
     SDL_mutex	*mutex;                     // 互斥量
     SDL_cond	*cond;                      // 条件变量
     PacketQueue	*pktq;                      // 数据包缓冲队列
+    int     keep_last;                      //是否保留一个帧
+    int     rindex_shown = 0;
 } FrameQueue;
 
 
@@ -119,7 +121,7 @@ int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *serial);
 
 
 /* 初始化FrameQueue，视频和音频keep_last设置为1，字幕设置为0 */
-int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size);
+int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size, int keep = 1);
 void frame_queue_destory(FrameQueue *f);
 void frame_queue_signal(FrameQueue *f);
 /* 获取队列当前Frame, 在调用该函数前先调用frame_queue_nb_remaining确保有frame可读 */

@@ -183,7 +183,7 @@ static void frame_queue_unref_item(Frame *vp)
 }
 
 /* 初始化FrameQueue，视频和音频keep_last设置为1，字幕设置为0 */
-int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size)
+int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size, int keep)
 {
     int i;
     memset(f, 0, sizeof(FrameQueue));
@@ -197,7 +197,7 @@ int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size)
     }
     f->pktq = pktq;
     f->max_size = FFMIN(max_size, FRAME_QUEUE_SIZE);
-
+    f->keep_last = !!keep;
     for (i = 0; i < f->max_size; i++)
         if (!(f->queue[i].frame = av_frame_alloc())) // 分配AVFrame结构体
             return AVERROR(ENOMEM);
@@ -228,14 +228,14 @@ void frame_queue_signal(FrameQueue *f)
 /* 获取队列当前Frame, 在调用该函数前先调用frame_queue_nb_remaining确保有frame可读 */
 Frame *frame_queue_peek(FrameQueue *f)
 {
-    return &f->queue[(f->rindex) % f->max_size];
+    return &f->queue[(f->rindex + f->rindex_shown) % f->max_size];
 }
 
 /* 获取当前Frame的下一Frame, 此时要确保queue里面至少有2个Frame */
 // 不管你什么时候调用，返回来肯定不是 NULL
 Frame *frame_queue_peek_next(FrameQueue *f)
 {
-    return &f->queue[(f->rindex  + 1) % f->max_size];
+    return &f->queue[(f->rindex + f->rindex_shown + 1) % f->max_size];
 }
 
 /* 获取last Frame：
@@ -265,7 +265,7 @@ Frame *frame_queue_peek_readable(FrameQueue *f)
 {
     /* wait until we have a readable a new frame */
     SDL_LockMutex(f->mutex);
-    while (f->size <= 0 &&
+    while (f->size - f->rindex_shown <= 0 &&
            !f->pktq->abort_request) {
         SDL_CondWait(f->cond, f->mutex);
     }
@@ -274,7 +274,7 @@ Frame *frame_queue_peek_readable(FrameQueue *f)
     if (f->pktq->abort_request)
         return NULL;
 
-    return &f->queue[(f->rindex) % f->max_size];
+    return &f->queue[(f->rindex + f->rindex_shown) % f->max_size];
 }
 // 更新写指针
 void frame_queue_push(FrameQueue *f)
@@ -290,7 +290,10 @@ void frame_queue_push(FrameQueue *f)
 /* 释放当前frame，并更新读索引rindex */
 void frame_queue_next(FrameQueue *f)
 {
-
+    if(f->keep_last && !f->rindex_shown){
+        f->rindex_shown = 1;
+        return ;
+    }
     frame_queue_unref_item(&f->queue[f->rindex]);
     if (++f->rindex == f->max_size)
         f->rindex = 0;
@@ -303,17 +306,16 @@ void frame_queue_next(FrameQueue *f)
 /* return the number of undisplayed frames in the queue */
 int frame_queue_nb_remaining(FrameQueue *f)
 {
-    return f->size;
+    return f->size - f->rindex_shown;
 }
 
 /* return last shown position */
 int64_t frame_queue_last_pos(FrameQueue *f)
 {
-    Frame *fp = &f->queue[f->rindex];
-    //    if (f->rindex_shown && fp->serial == f->pktq->serial)
-    //    if(fp)
-    //        return fp->pos;
-    //    else
+    //Frame *fp = &f->queue[f->rindex];
+    //if (f->rindex_shown && fp->serial == f->pktq->serial)
+    //    return fp->pos;
+    //else
     return -1;
 }
 

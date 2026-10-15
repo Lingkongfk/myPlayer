@@ -8,9 +8,11 @@ CtrlBar::CtrlBar(QWidget *parent)
 {
     ui->setupUi(this);
 
+    pause_icon = new QIcon(":/images/pause.png");
+
     //设置播放图标
-    QIcon play_icon = QIcon(":/images/play.png");
-    ui->playOrPauseBtn->setIcon(play_icon);
+    play_icon = new QIcon(":/images/play.png");
+    ui->playOrPauseBtn->setIcon(*play_icon);
     ui->playOrPauseBtn->setText("");
     //设置停止图标
     QIcon stop_icon = QIcon(":/images/stop.png");
@@ -42,6 +44,13 @@ CtrlBar::~CtrlBar()
 void CtrlBar::on_playOrPauseBtn_clicked()
 {
     qDebug() << "on_playOrPauseBtn_clicked";
+    if(pause){
+        pause = 0;
+        ui->playOrPauseBtn->setIcon(*play_icon);
+    }else{
+        pause = 1;
+        ui->playOrPauseBtn->setIcon(*pause_icon);
+    }
     emit SigPlayOrPause();
 }
 

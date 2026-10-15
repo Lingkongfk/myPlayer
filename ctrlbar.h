@@ -24,6 +24,9 @@ private slots:
     void on_stopBtn_clicked();
 
 private:
+    int pause = 0;
+    QIcon* pause_icon;
+    QIcon* play_icon;
     Ui::CtrlBar *ui;
 };
 

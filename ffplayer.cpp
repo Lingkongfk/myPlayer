@@ -831,29 +831,50 @@ void FFPlayer::video_refresh(double *remaining_time)
     // 目前我们先是只有队列里面有视频帧可以播放，就先播放出来
     // 判断有没有视频画面
     if(video_st) {
+retry:
         if (frame_queue_nb_remaining(&pictq) == 0) {
             // 什么都不用做，可以直接退出了
             return;
         }
 
+        double diff;
+        double last_duration, duration, delay;
+        Frame* vp, *lastvp;
+
         // 能跑到这里说明帧队列不为空，肯定有frame可以读取
+        lastvp = frame_queue_peek_last(&pictq);
         vp = frame_queue_peek(&pictq);  // 读取待显示帧
 
-        //对比audio的时间戳
-        double diff = vp->pts - get_clock(&audclk);
-        //std::cout << __FUNCTION__ << "vp->pts:" << vp->pts << "-af->pts:" << get_clock(&audclk) << ", diff:" << diff << std::endl;
-        if(diff > 0.1){
-            *remaining_time = FFMIN(*remaining_time, diff);
-            return ;
+        //如果暂停，就播放上一帧
+        if(pause){
+            goto display;
         }
 
+
+        //对比audio的时间戳，播放时间未到
+        diff = vp->pts - get_clock(&audclk);
+        //std::cout << __FUNCTION__ << "vp->pts:" << vp->pts << "-af->pts:" << get_clock(&audclk) << ", diff:" << diff << std::endl;
+        if(diff > 0.04){
+            *remaining_time = FFMIN(*remaining_time, diff);
+            return ;
+        }else if(diff < -0.04){
+            //落后40ms以上了，直接丢帧追赶
+            frame_queue_next(&pictq);
+            goto retry;
+        }
+
+        frame_queue_next(&pictq);
+
+
+
+display:
         // 刷新显示
-        if(video_refresh_callback_)
-            video_refresh_callback_(vp);
+        if(video_refresh_callback_ && pictq.rindex_shown)
+            video_refresh_callback_(frame_queue_peek_last(&pictq));
         else
             std::cout << __FUNCTION__ << " video_refresh_callback_ NULL" << std::endl;
 
-        frame_queue_next(&pictq);   // 当前vp帧出队列
+
     }
 }
 
