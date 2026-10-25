@@ -61,9 +61,8 @@ int FFPlayer::stream_open(const char *file_name)
     // if (packet_queue_init(&videoq) < 0 ||
     //     packet_queue_init(&audioq) < 0 )
     //     goto fail;
-
     //初始化时钟
-    init_clock(&audclk);
+    //init_clock(&audclk);
 
 
     read_thread_ = new std::thread(&FFPlayer::read_thread, this);
@@ -619,6 +618,9 @@ the_end:
 
 //音频重采样
 static int audio_decode_frame(FFPlayer* is){
+    if(is->audclk.get_pause()){
+        return -1;
+    }
     int data_size, resampled_data_size;
     AVChannelLayout dec_channel_layout;
     int wanted_nb_samples;
@@ -752,6 +754,8 @@ static void sdl_audio_callback(void* opaque, uint8_t* stream, int len){
         }
         if(is->audio_buf){
             memcpy(stream, (uint8_t*)is->audio_buf + is->audio_buf_index, len1);
+        }else{
+            memset(stream, 0, len1);
         }
 
         len -= len1;
@@ -762,7 +766,7 @@ static void sdl_audio_callback(void* opaque, uint8_t* stream, int len){
     }
 
     if(!isnan(is->audio_clock)){
-        set_clock(&is->audclk, is->audio_clock);
+        is->audclk.set_clock(is->audio_clock);
     }
 }
 
@@ -858,7 +862,7 @@ retry:
 
 
         //对比audio的时间戳，播放时间未到
-        diff = vp->pts - get_clock(&audclk);
+        diff = vp->pts - audclk.get_clock();
         //std::cout << __FUNCTION__ << "vp->pts:" << vp->pts << "-af->pts:" << get_clock(&audclk) << ", diff:" << diff << std::endl;
         if(diff > 0.04){
             *remaining_time = FFMIN(*remaining_time, diff);
@@ -871,16 +875,12 @@ retry:
 
         frame_queue_next(&pictq);
 
-
-
 display:
         // 刷新显示
         if(video_refresh_callback_ && pictq.rindex_shown)
             video_refresh_callback_(frame_queue_peek_last(&pictq));
         else
             std::cout << __FUNCTION__ << " video_refresh_callback_ NULL" << std::endl;
-
-
     }
 }
 
@@ -910,11 +910,25 @@ double FFPlayer::get_master_clock()
         //        val = get_clock(&vidclk);
         break;
     case AV_SYNC_AUDIO_MASTER:
-        val = get_clock(&audclk);
+        val = audclk.get_clock();
         break;
     default:
-        val = get_clock(&audclk);
+        val = audclk.get_clock();
         break;
     }
     return val;
+}
+
+int FFPlayer::Pause()
+{
+    if(this->pause){
+        //当前是暂停状态，要继续播放
+
+
+    }else{
+        //当前正在播放，要进行暂停
+
+    }
+    this->pause = !this->pause;
+    audclk.set_pause_val(this->pause);
 }

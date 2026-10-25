@@ -5,6 +5,7 @@
 #include <condition_variable>
 #include <memory>
 #include <functional>
+#include <atomic>
 
 #include <inttypes.h>
 #include <math.h>
@@ -173,25 +174,26 @@ int frame_queue_nb_remaining(FrameQueue *f);
 int64_t frame_queue_last_pos(FrameQueue *f);
 
 
-//时钟
-typedef struct Clock{
-    double pts;
-    double pts_drift;
-    double last_updated;
-}Clock;
-
 enum {
     AV_SYNC_UNKNOW_MASTER = -1,
     AV_SYNC_AUDIO_MASTER,
     AV_SYNC_VIDEO_MASTER
 };
 
-double get_clock(Clock* c);
-
-void set_clock_at(Clock* c, double pts, double time);
-
-void set_clock(Clock* c, double pts);
-void init_clock(Clock* c);
-
+class Clock{
+public:
+    Clock();
+    double get_clock();
+    void set_clock_at(double pts, double time);
+    void set_clock(double pts);
+    void set_pause_val(int val){ pause = val;}
+    int get_pause(){ return pause;}
+private:
+    double pts;
+    double pts_drift;
+    double last_updated;
+    int serial;
+    std::atomic<int> pause;
+};
 
 #endif // FFPLAY_DEF_H

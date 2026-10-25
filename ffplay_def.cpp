@@ -291,22 +291,31 @@ int64_t frame_queue_last_pos(FrameQueue *f)
 }
 
 
-double get_clock(Clock* c){
-    double time = av_gettime_relative() / 1000000.0; //微妙为单位，除以10^6换算成秒
-    return c->pts_drift + time; //当前的系统时间轴时间
+Clock::Clock()
+{
+    pause = 0;
+    serial = 0;
+    set_clock(NAN);
 }
 
-void set_clock_at(Clock* c, double pts, double time){
-    c->pts = pts;
-    c->last_updated = time;
-    c->pts_drift = pts - time;
-}
-
-void set_clock(Clock* c, double pts){
+double Clock::get_clock()
+{
+    if(this->pause){
+        return this->pts;
+    }
     double time = av_gettime_relative() / 1000000.0;
-    set_clock_at(c, pts, time);
+    return time + pts_drift;
 }
 
-void init_clock(Clock* c){
-    set_clock(c, NAN);
+void Clock::set_clock_at(double pts, double time)
+{
+    this->pts = pts;
+    this->last_updated = time;
+    this->pts_drift = pts - time;
+}
+
+void Clock::set_clock(double pts)
+{
+    double time = av_gettime_relative() / 1000000.0;
+    set_clock_at(pts, time);
 }

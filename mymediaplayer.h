@@ -26,7 +26,7 @@ public:
     //停止播放器
     int stop();
     //暂停
-    int pause();
+    int Pause();
     //seek到指定位置
     int seek_to(long long msec);
     //获取播放的状态

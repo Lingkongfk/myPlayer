@@ -115,8 +115,10 @@ public:
     Clock audclk;
     double audio_clock = 0;//当前pts + duration
 
-    int pause = 0;
+    std::atomic<int> pause = 0;
 
+    //暂停与继续播放
+    int Pause();
 };
 
 //内联函数，封装消息队列的几种插入消息方法

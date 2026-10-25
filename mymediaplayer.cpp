@@ -80,6 +80,11 @@ int MyMediaPlayer::stop()
     }
 }
 
+int MyMediaPlayer::Pause()
+{
+    return ffplayer_->Pause();
+}
+
 int MyMediaPlayer::get_msg(AVMessage *msg, int block)
 {
     while(true){

@@ -78,8 +78,7 @@ void MainWind::OnPlayOrPause()
         }
     }else{
         //播放器已经有了，这里就是暂停或者恢复播放了
-
-
+        mp_->Pause();
     }
 }
 
