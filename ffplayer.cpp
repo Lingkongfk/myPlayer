@@ -57,10 +57,10 @@ int FFPlayer::stream_open(const char *file_name)
         goto fail;
     }
 
-    // 初始化Packet包队列
-    if (packet_queue_init(&videoq) < 0 ||
-        packet_queue_init(&audioq) < 0 )
-        goto fail;
+    // 初始化Packet包队列，当前类封装，无需手动init
+    // if (packet_queue_init(&videoq) < 0 ||
+    //     packet_queue_init(&audioq) < 0 )
+    //     goto fail;
 
     //初始化时钟
     init_clock(&audclk);
@@ -85,8 +85,10 @@ void FFPlayer::stream_close()
 
     // 关闭解复用器 avformat_close_input(&is->ic);
     // 释放packet队列
-    packet_queue_destroy(&videoq);
-    packet_queue_destroy(&audioq);
+    videoq.~PacketQueue();
+    audioq.~PacketQueue();
+    // packet_queue_destroy(&videoq);
+    // packet_queue_destroy(&audioq);
     // 释放frame队列
     frame_queue_destory(&pictq);
     frame_queue_destory(&sampq);
@@ -343,10 +345,11 @@ int FFPlayer::read_thread()
 
         if(pkt->stream_index == audio_stream){
             printf("audio ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
-            packet_queue_put(&audioq, pkt);
+
+            audioq.push(pkt);
         }else if(pkt->stream_index == video_stream){
             printf("video ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
-            packet_queue_put(&videoq, pkt);
+            videoq.push(pkt);
         }
         else{
             av_packet_unref(pkt);
@@ -390,7 +393,8 @@ void Decoder::decoder_init(AVCodecContext *avctx, PacketQueue *queue)
 
 int Decoder::decoder_start(AVMediaType codec_type, const char *thread_name, void *arg)
 {
-    packet_queue_start(queue_);
+    //packet_queue_start(queue_);
+    queue_->start();
     if(AVMEDIA_TYPE_AUDIO == codec_type){
         decoder_thread_ = new std::thread(&Decoder::audio_thread, this, arg);
     }else if(AVMEDIA_TYPE_VIDEO == codec_type){
@@ -403,14 +407,14 @@ int Decoder::decoder_start(AVMediaType codec_type, const char *thread_name, void
 
 void Decoder::decoder_abort(FrameQueue *fq)
 {
-    packet_queue_abort(queue_);
+    queue_->start();
     frame_queue_signal(fq);
     if(decoder_thread_ && decoder_thread_->joinable()){
         decoder_thread_->join();
         delete decoder_thread_;
         decoder_thread_ = NULL;
     }
-    packet_queue_flush(queue_);
+    queue_->flush();
 }
 
 void Decoder::decoder_destory()
@@ -426,7 +430,7 @@ int Decoder::decoder_decode_frame(AVFrame *frame)
     for(;;){
         AVPacket pkt;
         do{
-            if(queue_->abort_request){
+            if(queue_->getAbort_request()){
                 return -1;
             }
             switch(avctx_->codec_type){
@@ -476,7 +480,9 @@ int Decoder::decoder_decode_frame(AVFrame *frame)
 
 
         //如果没有能取到的解码frame，就发送
-        if(packet_queue_get(queue_, &pkt, 1, &pkt_serial_) < 0)
+        // if(packet_queue_get(queue_, &pkt, 1, &pkt_serial_) < 0)
+        //     return -1;
+        if(queue_->pop(&pkt, &pkt_serial_, 1) < 0)
             return -1;
 
         //qDebug() << "send packet to decode";

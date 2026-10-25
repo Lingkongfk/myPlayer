@@ -1,11 +1,17 @@
 #ifndef FFPLAY_DEF_H
 #define FFPLAY_DEF_H
 
+#include <mutex>
+#include <condition_variable>
+#include <memory>
+#include <functional>
+
 #include <inttypes.h>
 #include <math.h>
 #include <limits.h>
 #include <signal.h>
 #include <stdint.h>
+
 extern "C" {
 #include "libavutil/avstring.h"
 #include "libavutil/eval.h"
@@ -58,22 +64,55 @@ typedef struct AudioParams{
 } AudioParams;
 
 
-typedef struct MyAVPacketList{
-    AVPacket pkt;               //解封装后的包数据
-    struct MyAVPacketList* next;//下一个节点
-    int serial;                 //播放序列
-}MyAVPacketList;
+//包节点，我们的包队列使用链表实现
+struct PacketNode{
+    AVPacket* pkt;    //包
+    int serial;       //播放序列
+    PacketNode* next; //下一个节点
+};
 
-typedef struct PacketQueue {
-    MyAVPacketList	*first_pkt, *last_pkt;  // 队首，队尾指针
-    int		nb_packets;   // 包数量，也就是队列元素数量
-    int		size;         // 队列所有元素的数据大小总和
-    int64_t		duration; // 队列所有元素的数据播放持续时间
-    int		abort_request; // 用户退出请求标志
-    int		serial;         // 播放序列号，和MyAVPacketList的serial作用相同，但改变的时序稍微有点不同
-    SDL_mutex	*mutex;     // 用于维持PacketQueue的多线程安全(SDL_mutex可以按pthread_mutex_t理解）
-    SDL_cond	*cond;      // 用于读、写线程相互通知(SDL_cond可以按pthread_cond_t理解)
-} PacketQueue;
+class PacketQueue{
+public:
+    PacketQueue();
+    ~PacketQueue();
+
+    //启动
+    int start();
+    //放入队列，直接把参数的pkt移动走，外部传入的pkt可以直接free
+    int push(AVPacket* pkt);
+    //获得并且出队列，需要外部申请pkt的内存，直接把队列的数据移动到外部，队列内部直接销毁
+    int pop(AVPacket* pkt, int* get_serial, int block = 1);
+    //终止队列
+    void abort();
+    //刷新队列
+    void flush();
+
+    int getSerial(){
+        std::unique_lock<std::mutex> lock(mtx);
+        return serial;
+    }
+    int getSize(){
+        std::unique_lock<std::mutex> lock(mtx);
+        return size;
+    }
+    int getAbort_request(){
+        std::unique_lock<std::mutex> lock(mtx);
+        return abort_request;
+    }
+private:
+    int push_private(AVPacket* pkt);
+
+    PacketNode* first, *last; //首尾指针
+    int size;  //队列大小
+    int nb_packets; //包数量
+    double duration;//队列总时长
+    int serial; //队列当前播放序列
+    int abort_request;//终止标志
+    std::mutex mtx;//锁
+    std::condition_variable cond;//条件变量
+};
+
+
 
 #define VIDEO_PICTURE_QUEUE_SIZE	3       // 图像帧缓存数量
 #define VIDEO_PICTURE_QUEUE_SIZE_MIN        (3)
@@ -107,17 +146,6 @@ typedef struct FrameQueue {
     int     keep_last;                      //是否保留一个帧
     int     rindex_shown = 0;
 } FrameQueue;
-
-
-// 队列相关
-int packet_queue_put(PacketQueue *q, AVPacket *pkt);
-int packet_queue_put_nullpacket(PacketQueue *q, int stream_index);
-int packet_queue_init(PacketQueue *q);
-void packet_queue_flush(PacketQueue *q);
-void packet_queue_destroy(PacketQueue *q);
-void packet_queue_abort(PacketQueue *q);
-void packet_queue_start(PacketQueue *q);
-int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block, int *serial);
 
 
 /* 初始化FrameQueue，视频和音频keep_last设置为1，字幕设置为0 */
