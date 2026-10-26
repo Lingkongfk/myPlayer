@@ -132,6 +132,7 @@ typedef struct Frame {
     int		width;              // 图像宽度
     int		height;             // 图像高读
     int		format;             // 对于图像为(enum AVPixelFormat)
+    int     serial;
 } Frame;
 
 /* 这是一个循环队列，windex是指其中的首元素，rindex是指其中的尾部元素. */
@@ -184,15 +185,16 @@ class Clock{
 public:
     Clock();
     double get_clock();
-    void set_clock_at(double pts, double time);
-    void set_clock(double pts);
+    void set_clock_at(double pts, double time, int serial);
+    void set_clock(double pts, int serial);
     void set_pause_val(int val){ pause = val;}
     int get_pause(){ return pause;}
+    int serial;
 private:
     double pts;
     double pts_drift;
     double last_updated;
-    int serial;
+
     std::atomic<int> pause;
 };
 

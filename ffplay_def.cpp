@@ -294,8 +294,7 @@ int64_t frame_queue_last_pos(FrameQueue *f)
 Clock::Clock()
 {
     pause = 0;
-    serial = 0;
-    set_clock(NAN);
+    set_clock(NAN, 0);
 }
 
 double Clock::get_clock()
@@ -307,15 +306,16 @@ double Clock::get_clock()
     return time + pts_drift;
 }
 
-void Clock::set_clock_at(double pts, double time)
+void Clock::set_clock_at(double pts, double time, int serial)
 {
     this->pts = pts;
     this->last_updated = time;
     this->pts_drift = pts - time;
+    this->serial = serial;
 }
 
-void Clock::set_clock(double pts)
+void Clock::set_clock(double pts, int serial)
 {
     double time = av_gettime_relative() / 1000000.0;
-    set_clock_at(pts, time);
+    set_clock_at(pts, time, serial);
 }

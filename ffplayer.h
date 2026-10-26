@@ -113,12 +113,16 @@ public:
     double get_master_clock();
     int av_sync_type = AV_SYNC_AUDIO_MASTER;
     Clock audclk;
+    Clock vidclk;
     double audio_clock = 0;//当前pts + duration
 
     std::atomic<int> pause = 0;
 
     //暂停与继续播放
     int Pause();
+    //进行播放时长的校准
+    double cal_now_delay(double duration);
+    double frame_timer = 0; //当前视频帧计时器
 };
 
 //内联函数，封装消息队列的几种插入消息方法

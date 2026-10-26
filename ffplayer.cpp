@@ -2,6 +2,7 @@
 #include "ffmsg.h"
 #include <string.h>
 #include <iostream>
+#include <algorithm>
 #include <QDebug>
 //sdl缓冲区大小
 #define SDL_AUDIO_MIN_BUF_SIZE 512
@@ -518,7 +519,7 @@ int Decoder::queue_picture(FrameQueue *fq, AVFrame *src_frame, double pts, doubl
     vp->width = src_frame->width;
     vp->height = src_frame->height;
     vp->format = src_frame->format;
-
+    vp->serial = serial;
     vp->pts = pts;
     vp->duration = duration;
     //    vp->pos = pos;
@@ -766,7 +767,7 @@ static void sdl_audio_callback(void* opaque, uint8_t* stream, int len){
     }
 
     if(!isnan(is->audio_clock)){
-        is->audclk.set_clock(is->audio_clock);
+        is->audclk.set_clock(is->audio_clock, is->audclk.serial);
     }
 }
 
@@ -834,6 +835,38 @@ int FFPlayer::video_refresh_thread()
 }
 
 
+double vp_duration(Frame* lastvp, Frame* vp){
+    if(lastvp->serial == vp->serial){
+        double duration = vp->pts - lastvp->pts;
+        if(isnan(duration) || duration < 0){
+            return lastvp->duration;
+        }else{
+            return duration;
+        }
+    }else{
+        return 0.0;
+    }
+}
+
+double FFPlayer::cal_now_delay(double duration){
+    double sync_threshold = 0, diff = 0;
+
+    //获取当前时钟和同步时钟的差值
+    diff = vidclk.get_clock() - get_master_clock();
+
+    //我们最精确的差值在 0.04s也就是40ms以内就是同步，最坏100ms以内是同步
+    sync_threshold = std::max(0.04, std::min(0.1, duration));
+    if(!isnan(diff) && fabs(diff) < 10.0){//这里先限制一下
+        if(diff <= -sync_threshold){
+            //落后超过阈值，立即播放进行追赶
+            duration = std::max(0.0, duration + diff);
+        }else if(diff >= sync_threshold){
+            //视频领先等待音频
+            duration = duration + diff;
+        }
+    }
+    return duration;
+}
 
 void FFPlayer::video_refresh(double *remaining_time)
 {
@@ -841,36 +874,70 @@ void FFPlayer::video_refresh(double *remaining_time)
     // 目前我们先是只有队列里面有视频帧可以播放，就先播放出来
     // 判断有没有视频画面
     if(video_st) {
+        double diff, time;
+        double last_duration, duration, delay;
+        Frame* vp, *lastvp;
 retry:
         if (frame_queue_nb_remaining(&pictq) == 0) {
             // 什么都不用做，可以直接退出了
             return;
         }
 
-        double diff;
-        double last_duration, duration, delay;
-        Frame* vp, *lastvp;
-
         // 能跑到这里说明帧队列不为空，肯定有frame可以读取
         lastvp = frame_queue_peek_last(&pictq);
         vp = frame_queue_peek(&pictq);  // 读取待显示帧
+
+        //如果seek操作，重新读帧显示
+        if(vp->serial != videoq.getSerial()){
+            frame_queue_next(&pictq);
+            goto retry;
+        }
+
+        //seek时更新当前帧显示的时钟
+        if(vp->serial != lastvp->serial){
+            frame_timer = av_gettime_relative() / 1000000.0;
+        }
+
 
         //如果暂停，就播放上一帧
         if(pause){
             goto display;
         }
 
+        //获得上一帧的播放时长
+        last_duration = vp_duration(lastvp, vp);
+        delay = cal_now_delay(last_duration);
 
-        //对比audio的时间戳，播放时间未到
-        diff = vp->pts - audclk.get_clock();
-        //std::cout << __FUNCTION__ << "vp->pts:" << vp->pts << "-af->pts:" << get_clock(&audclk) << ", diff:" << diff << std::endl;
-        if(diff > 0.04){
-            *remaining_time = FFMIN(*remaining_time, diff);
-            return ;
-        }else if(diff < -0.04){
-            //落后40ms以上了，直接丢帧追赶
-            frame_queue_next(&pictq);
-            goto retry;
+        //获得当前系统时间，查看是否需要继续播放一段时间
+        time = av_gettime_relative() / 1000000.0;
+        if(time < frame_timer + delay){
+            *remaining_time = std::min(frame_timer + delay - time, *remaining_time);
+            goto display;
+        }
+        //如果上一帧播放落后或者正常
+        //更新frame_timer
+        frame_timer += delay;
+
+        //如果frame_timer落后系统时间超过100ms就更新为系统时间，这步在播放第一帧的时候一定会被调用
+        if(delay > 0 && time - frame_timer > 0.1){
+            frame_timer = time;
+        }
+
+        //即将播放，同步当前视频时钟
+        SDL_LockMutex(pictq.mutex);
+        if(!isnan(vp->pts)){
+            vidclk.set_clock(vp->pts, vp->serial);
+        }
+        SDL_UnlockMutex(pictq.mutex);
+
+        if(frame_queue_nb_remaining(&pictq) > 1){
+            Frame* nextvp = frame_queue_peek_next(&pictq);
+            duration = vp_duration(vp, nextvp);
+            //按照时间下一帧都已经播放了，直接丢帧
+            if(time > frame_timer + duration){
+                frame_queue_next(&pictq);
+                goto retry;
+            }
         }
 
         frame_queue_next(&pictq);
