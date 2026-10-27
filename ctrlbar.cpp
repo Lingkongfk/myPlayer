@@ -41,6 +41,18 @@ CtrlBar::~CtrlBar()
     delete ui;
 }
 
+void CtrlBar::set_duration(long long micr)
+{
+    QTime time = QTime::fromMSecsSinceStartOfDay(micr / 1000);
+    ui->totalTimeEdit->setTime(time);
+}
+
+void CtrlBar::set_now_position(long long micr)
+{
+    QTime time = QTime::fromMSecsSinceStartOfDay(micr);
+    ui->playTimeEdit->setTime(time);
+}
+
 void CtrlBar::on_playOrPauseBtn_clicked()
 {
     qDebug() << "on_playOrPauseBtn_clicked";
@@ -59,5 +71,17 @@ void CtrlBar::on_stopBtn_clicked()
 {
     qDebug() << "on_stopBtn_clicked";
     emit SigStop();
+}
+
+
+void CtrlBar::on_backwardBtn_clicked()
+{
+    emit SigBackward();
+}
+
+
+void CtrlBar::on_forwardBtn_clicked()
+{
+    emit SigForward();
 }
 

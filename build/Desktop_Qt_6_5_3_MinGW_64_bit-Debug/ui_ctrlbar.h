@@ -36,9 +36,9 @@ public:
     QSlider *volumeSlider;
     QGridLayout *gridLayout;
     QPushButton *playOrPauseBtn;
-    QPushButton *backwardBtn;
-    QPushButton *playListBtn;
     QPushButton *forwardBtn;
+    QPushButton *playListBtn;
+    QPushButton *backwardBtn;
     QPushButton *stopBtn;
     QPushButton *settingBtn;
     QLabel *label;
@@ -110,12 +110,12 @@ public:
 
         gridLayout->addWidget(playOrPauseBtn, 0, 0, 1, 1);
 
-        backwardBtn = new QPushButton(CtrlBar);
-        backwardBtn->setObjectName("backwardBtn");
-        backwardBtn->setMinimumSize(QSize(30, 30));
-        backwardBtn->setMaximumSize(QSize(30, 30));
+        forwardBtn = new QPushButton(CtrlBar);
+        forwardBtn->setObjectName("forwardBtn");
+        forwardBtn->setMinimumSize(QSize(30, 30));
+        forwardBtn->setMaximumSize(QSize(30, 30));
 
-        gridLayout->addWidget(backwardBtn, 0, 3, 1, 1);
+        gridLayout->addWidget(forwardBtn, 0, 3, 1, 1);
 
         playListBtn = new QPushButton(CtrlBar);
         playListBtn->setObjectName("playListBtn");
@@ -124,12 +124,12 @@ public:
 
         gridLayout->addWidget(playListBtn, 0, 9, 1, 1);
 
-        forwardBtn = new QPushButton(CtrlBar);
-        forwardBtn->setObjectName("forwardBtn");
-        forwardBtn->setMinimumSize(QSize(30, 30));
-        forwardBtn->setMaximumSize(QSize(30, 30));
+        backwardBtn = new QPushButton(CtrlBar);
+        backwardBtn->setObjectName("backwardBtn");
+        backwardBtn->setMinimumSize(QSize(30, 30));
+        backwardBtn->setMaximumSize(QSize(30, 30));
 
-        gridLayout->addWidget(forwardBtn, 0, 2, 1, 1);
+        gridLayout->addWidget(backwardBtn, 0, 2, 1, 1);
 
         stopBtn = new QPushButton(CtrlBar);
         stopBtn->setObjectName("stopBtn");
@@ -189,9 +189,9 @@ public:
         CtrlBar->setWindowTitle(QCoreApplication::translate("CtrlBar", "Form", nullptr));
         volumeBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
         playOrPauseBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
-        backwardBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
-        playListBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
         forwardBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
+        playListBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
+        backwardBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
         stopBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
         settingBtn->setText(QCoreApplication::translate("CtrlBar", "PushButton", nullptr));
         label->setText(QCoreApplication::translate("CtrlBar", "/", nullptr));

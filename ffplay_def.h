@@ -190,10 +190,11 @@ public:
     void set_pause_val(int val){ pause = val;}
     int get_pause(){ return pause;}
     int serial;
+    double last_updated;
 private:
     double pts;
     double pts_drift;
-    double last_updated;
+
 
     std::atomic<int> pause;
 };

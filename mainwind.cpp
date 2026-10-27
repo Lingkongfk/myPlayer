@@ -8,6 +8,8 @@ MainWind::MainWind(QWidget *parent)
     ui->setupUi(this);
     QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigPlayOrPause, this, &MainWind::OnPlayOrPause);
     QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigStop, this, &MainWind::OnStop);
+    QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigBackward, this, &MainWind::OnBackward);
+    QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigForward, this, &MainWind::OnForward);
 }
 
 MainWind::~MainWind()
@@ -65,8 +67,22 @@ void MainWind::OnPlayOrPause()
         }
         mp_->AddVideoRefreshCallback(std::bind(&MainWind::outputVideo, this,
                                                std::placeholders::_1));
+        mp_->AddDurationCallback(std::bind(&MainWind::get_duration, this, std::placeholders::_1));
+
 
         mp_->set_data_source("D:/learnVideo/testVideo/test_1920x1080.mp4");//暂时先用着
+
+        //启动定时器
+        if(timer == nullptr){
+            timer = new QTimer;
+            timer->setInterval(200);//200ms触发一次
+            QObject::connect(timer, &QTimer::timeout, [=](){
+                long long t = mp_->get_current_position();
+                ui->ctrlBarWidget->set_now_position(t);
+                now_time = t;
+            });
+            timer->start();
+        }
 
         //创建播放器成功后，启动准备
         ret = mp_->prepare_async();
@@ -76,6 +92,7 @@ void MainWind::OnPlayOrPause()
             mp_ = NULL;
             return ;
         }
+
     }else{
         //播放器已经有了，这里就是暂停或者恢复播放了
         mp_->Pause();
@@ -91,6 +108,25 @@ void MainWind::OnStop()
         delete mp_;
         mp_ = NULL;
     }
+}
+
+void MainWind::OnForward()
+{
+    if(mp_){
+
+    }
+}
+
+void MainWind::OnBackward()
+{
+    if(mp_){
+
+    }
+}
+
+void MainWind::get_duration(long long micr)
+{
+    ui->ctrlBarWidget->set_duration(micr);
 }
 
 int MainWind::outputVideo(const Frame *frame)

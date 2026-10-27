@@ -67,6 +67,8 @@ public:
     int video_refresh_thread();
     void video_refresh(double *remaining_time);
 
+    std::function<void (long long)> add_duration_callback_ = NULL;
+    void AddDurationCallback(std::function<void(long long)> callback);
 
     //读取线程
     int read_thread();
@@ -123,6 +125,9 @@ public:
     //进行播放时长的校准
     double cal_now_delay(double duration);
     double frame_timer = 0; //当前视频帧计时器
+
+
+    std::atomic<long long> title_duration = 0;
 };
 
 //内联函数，封装消息队列的几种插入消息方法

@@ -29,20 +29,11 @@ public:
     int Pause();
     //seek到指定位置
     int seek_to(long long msec);
-    //获取播放的状态
-    int get_state();
-    //判断是否正在播放
-    bool is_playing();
     //获取当前的播放位置
     long long get_current_position();
     //获取视频总时长
     long long get_duration();
-    //获取已经播放的长度
-    long long get_playable_duration();
-    //设置是否循环播放
-    void set_loop();
-    //获取是否循环播放
-    int get_loop();
+
     //读取循环消息
     int get_msg(AVMessage* msg, int block);
     // 设置音量
@@ -54,6 +45,7 @@ public:
     int msg_loop(void* arg);
 
     void AddVideoRefreshCallback(std::function<int(const Frame *)> callback);
+    void AddDurationCallback(std::function<void (long long)> callback);
 
 private:
     std::mutex mutex_;         //线程安全互斥量

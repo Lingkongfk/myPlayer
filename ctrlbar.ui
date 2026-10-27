@@ -171,7 +171,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="QPushButton" name="backwardBtn">
+      <widget class="QPushButton" name="forwardBtn">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -209,7 +209,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QPushButton" name="forwardBtn">
+      <widget class="QPushButton" name="backwardBtn">
        <property name="minimumSize">
         <size>
          <width>30</width>

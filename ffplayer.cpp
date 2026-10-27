@@ -291,7 +291,8 @@ int FFPlayer::read_thread()
     }
     ffp_notify_msg1(this, FFP_MSG_FIND_STREAM_INFO);
     std::cout << "read_thread FFP_MSG_FIND_STREAM_INFO " << this << std::endl;
-
+    title_duration = ic->duration;
+    add_duration_callback_(title_duration);
 
     st_index[AVMEDIA_TYPE_VIDEO] = av_find_best_stream(ic, AVMEDIA_TYPE_VIDEO,
                                                        st_index[AVMEDIA_TYPE_VIDEO], -1, NULL, 0);
@@ -951,6 +952,11 @@ display:
     }
 }
 
+void FFPlayer::AddDurationCallback(std::function<void (long long)> callback)
+{
+    add_duration_callback_ = callback;
+}
+
 int FFPlayer::get_master_sync_type()
 {
     if (av_sync_type == AV_SYNC_VIDEO_MASTER) {
@@ -990,12 +996,13 @@ int FFPlayer::Pause()
 {
     if(this->pause){
         //当前是暂停状态，要继续播放
-
-
+        frame_timer += (av_gettime_relative() / 1000000.0) - vidclk.last_updated;
+        vidclk.set_clock(vidclk.get_clock(), vidclk.serial);
     }else{
         //当前正在播放，要进行暂停
 
     }
     this->pause = !this->pause;
     audclk.set_pause_val(this->pause);
+    vidclk.set_pause_val(this->pause);
 }

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string.h>
 
+#define NAN		__builtin_nanf("")
+
 MyMediaPlayer::MyMediaPlayer() {
     std::cout << " IjkMediaPlayer()\n ";
 }
@@ -85,6 +87,20 @@ int MyMediaPlayer::Pause()
     return ffplayer_->Pause();
 }
 
+int MyMediaPlayer::seek_to(long long msec)
+{
+
+}
+
+long long MyMediaPlayer::get_current_position()
+{
+    //获得的是单位为秒
+    if(ffplayer_->audclk.get_clock() != NAN){
+        return (long long)(ffplayer_->audclk.get_clock() * 1000);
+    }
+    return 0;
+}
+
 int MyMediaPlayer::get_msg(AVMessage *msg, int block)
 {
     while(true){
@@ -132,4 +148,9 @@ int MyMediaPlayer::msg_loop(void *arg)
 void MyMediaPlayer::AddVideoRefreshCallback(std::function<int (const Frame *)> callback)
 {
     ffplayer_->AddVideoRefreshCallback(callback);
+}
+
+void MyMediaPlayer::AddDurationCallback(std::function<void (long long)> callback)
+{
+    ffplayer_->AddDurationCallback(callback);
 }
