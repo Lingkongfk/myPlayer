@@ -44,24 +44,32 @@ static constexpr auto qt_meta_stringdata_CLASSCtrlBarENDCLASS = QtMocHelpers::st
     "SigStop",
     "SigForward",
     "SigBackward",
+    "SigSeek",
     "on_playOrPauseBtn_clicked",
     "on_stopBtn_clicked",
     "on_backwardBtn_clicked",
-    "on_forwardBtn_clicked"
+    "on_forwardBtn_clicked",
+    "on_playSlider_sliderReleased",
+    "on_playSlider_valueChanged",
+    "value"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSCtrlBarENDCLASS_t {
-    uint offsetsAndSizes[20];
+    uint offsetsAndSizes[28];
     char stringdata0[8];
     char stringdata1[15];
     char stringdata2[1];
     char stringdata3[8];
     char stringdata4[11];
     char stringdata5[12];
-    char stringdata6[26];
-    char stringdata7[19];
-    char stringdata8[23];
-    char stringdata9[22];
+    char stringdata6[8];
+    char stringdata7[26];
+    char stringdata8[19];
+    char stringdata9[23];
+    char stringdata10[22];
+    char stringdata11[29];
+    char stringdata12[27];
+    char stringdata13[6];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSCtrlBarENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -73,10 +81,14 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSCtrlBarENDCLASS_t qt_meta_strin
         QT_MOC_LITERAL(24, 7),  // "SigStop"
         QT_MOC_LITERAL(32, 10),  // "SigForward"
         QT_MOC_LITERAL(43, 11),  // "SigBackward"
-        QT_MOC_LITERAL(55, 25),  // "on_playOrPauseBtn_clicked"
-        QT_MOC_LITERAL(81, 18),  // "on_stopBtn_clicked"
-        QT_MOC_LITERAL(100, 22),  // "on_backwardBtn_clicked"
-        QT_MOC_LITERAL(123, 21)   // "on_forwardBtn_clicked"
+        QT_MOC_LITERAL(55, 7),  // "SigSeek"
+        QT_MOC_LITERAL(63, 25),  // "on_playOrPauseBtn_clicked"
+        QT_MOC_LITERAL(89, 18),  // "on_stopBtn_clicked"
+        QT_MOC_LITERAL(108, 22),  // "on_backwardBtn_clicked"
+        QT_MOC_LITERAL(131, 21),  // "on_forwardBtn_clicked"
+        QT_MOC_LITERAL(153, 28),  // "on_playSlider_sliderReleased"
+        QT_MOC_LITERAL(182, 26),  // "on_playSlider_valueChanged"
+        QT_MOC_LITERAL(209, 5)   // "value"
     },
     "CtrlBar",
     "SigPlayOrPause",
@@ -84,10 +96,14 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSCtrlBarENDCLASS_t qt_meta_strin
     "SigStop",
     "SigForward",
     "SigBackward",
+    "SigSeek",
     "on_playOrPauseBtn_clicked",
     "on_stopBtn_clicked",
     "on_backwardBtn_clicked",
-    "on_forwardBtn_clicked"
+    "on_forwardBtn_clicked",
+    "on_playSlider_sliderReleased",
+    "on_playSlider_valueChanged",
+    "value"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -99,36 +115,42 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSCtrlBarENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   62,    2, 0x06,    1 /* Public */,
-       3,    0,   63,    2, 0x06,    2 /* Public */,
-       4,    0,   64,    2, 0x06,    3 /* Public */,
-       5,    0,   65,    2, 0x06,    4 /* Public */,
+       1,    0,   80,    2, 0x06,    1 /* Public */,
+       3,    0,   81,    2, 0x06,    2 /* Public */,
+       4,    0,   82,    2, 0x06,    3 /* Public */,
+       5,    0,   83,    2, 0x06,    4 /* Public */,
+       6,    1,   84,    2, 0x06,    5 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       6,    0,   66,    2, 0x08,    5 /* Private */,
-       7,    0,   67,    2, 0x08,    6 /* Private */,
-       8,    0,   68,    2, 0x08,    7 /* Private */,
-       9,    0,   69,    2, 0x08,    8 /* Private */,
+       7,    0,   87,    2, 0x08,    7 /* Private */,
+       8,    0,   88,    2, 0x08,    8 /* Private */,
+       9,    0,   89,    2, 0x08,    9 /* Private */,
+      10,    0,   90,    2, 0x08,   10 /* Private */,
+      11,    0,   91,    2, 0x08,   11 /* Private */,
+      12,    1,   92,    2, 0x08,   12 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::LongLong,    2,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   13,
 
        0        // eod
 };
@@ -150,6 +172,9 @@ Q_CONSTINIT const QMetaObject CtrlBar::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'SigBackward'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'SigSeek'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<long long, std::false_type>,
         // method 'on_playOrPauseBtn_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_stopBtn_clicked'
@@ -157,7 +182,12 @@ Q_CONSTINIT const QMetaObject CtrlBar::staticMetaObject = { {
         // method 'on_backwardBtn_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_forwardBtn_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_playSlider_sliderReleased'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_playSlider_valueChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>
     >,
     nullptr
 } };
@@ -172,10 +202,13 @@ void CtrlBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 1: _t->SigStop(); break;
         case 2: _t->SigForward(); break;
         case 3: _t->SigBackward(); break;
-        case 4: _t->on_playOrPauseBtn_clicked(); break;
-        case 5: _t->on_stopBtn_clicked(); break;
-        case 6: _t->on_backwardBtn_clicked(); break;
-        case 7: _t->on_forwardBtn_clicked(); break;
+        case 4: _t->SigSeek((*reinterpret_cast< std::add_pointer_t<qlonglong>>(_a[1]))); break;
+        case 5: _t->on_playOrPauseBtn_clicked(); break;
+        case 6: _t->on_stopBtn_clicked(); break;
+        case 7: _t->on_backwardBtn_clicked(); break;
+        case 8: _t->on_forwardBtn_clicked(); break;
+        case 9: _t->on_playSlider_sliderReleased(); break;
+        case 10: _t->on_playSlider_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -208,8 +241,14 @@ void CtrlBar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
                 return;
             }
         }
+        {
+            using _t = void (CtrlBar::*)(long long );
+            if (_t _q_method = &CtrlBar::SigSeek; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 4;
+                return;
+            }
+        }
     }
-    (void)_a;
 }
 
 const QMetaObject *CtrlBar::metaObject() const
@@ -231,13 +270,13 @@ int CtrlBar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 11)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 8;
+        _id -= 11;
     }
     return _id;
 }
@@ -264,5 +303,12 @@ void CtrlBar::SigForward()
 void CtrlBar::SigBackward()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+}
+
+// SIGNAL 4
+void CtrlBar::SigSeek(long long _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP

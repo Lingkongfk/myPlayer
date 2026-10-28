@@ -28,7 +28,7 @@ public:
     //暂停
     int Pause();
     //seek到指定位置
-    int seek_to(long long msec);
+    int seek_to(long long from, long long to);
     //获取当前的播放位置
     long long get_current_position();
     //获取视频总时长

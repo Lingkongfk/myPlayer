@@ -10,6 +10,7 @@ MainWind::MainWind(QWidget *parent)
     QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigStop, this, &MainWind::OnStop);
     QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigBackward, this, &MainWind::OnBackward);
     QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigForward, this, &MainWind::OnForward);
+    QObject::connect(ui->ctrlBarWidget, &CtrlBar::SigSeek, this, &MainWind::OnSeek);
 }
 
 MainWind::~MainWind()
@@ -77,9 +78,9 @@ void MainWind::OnPlayOrPause()
             timer = new QTimer;
             timer->setInterval(200);//200ms触发一次
             QObject::connect(timer, &QTimer::timeout, [=](){
-                long long t = mp_->get_current_position();
-                ui->ctrlBarWidget->set_now_position(t);
-                now_time = t;
+                now_time = mp_->get_current_position();
+                ui->ctrlBarWidget->set_now_position(now_time);
+                ui->ctrlBarWidget->set_now_slider(now_time / 1000);
             });
             timer->start();
         }
@@ -110,23 +111,40 @@ void MainWind::OnStop()
     }
 }
 
+//seek操作，默认前进或者后退10s
 void MainWind::OnForward()
 {
     if(mp_){
-
+        long long current_time = now_time / 1000;//单位毫秒，转换成秒
+        mp_->seek_to(current_time, current_time + 10);
     }
 }
 
 void MainWind::OnBackward()
 {
     if(mp_){
+        long long current_time = now_time / 1000;//单位毫秒，转换成秒
+        mp_->seek_to(current_time, current_time - 10);
+    }
+}
 
+void MainWind::OnSeek(long long seek_to_time)
+{
+    if(mp_){
+        long long current_time = now_time / 1000;//单位毫秒，转换成秒
+        mp_->seek_to(current_time, seek_to_time);
     }
 }
 
 void MainWind::get_duration(long long micr)
 {
-    ui->ctrlBarWidget->set_duration(micr);
+    if(micr <= 0){
+        return ;
+    }
+    //非常经典，把要执行的操作利用invokeMethod交给Qt的GUI线程，main的主线程会自动从队列取出来执行
+    QMetaObject::invokeMethod(this, [this, micr](){
+        ui->ctrlBarWidget->set_duration(micr);
+    }, Qt::QueuedConnection);
 }
 
 int MainWind::outputVideo(const Frame *frame)

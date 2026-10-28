@@ -17,12 +17,15 @@ public:
 
     void set_duration(long long micr);
     void set_now_position(long long micr);
+
+    void set_now_slider(long long second);
 signals:
     void SigPlayOrPause(); //开始暂停键信号
     void SigStop();
 
     void SigForward();//前进
     void SigBackward();//回退
+    void SigSeek(long long);
 private slots:
     void on_playOrPauseBtn_clicked();
 
@@ -32,11 +35,16 @@ private slots:
 
     void on_forwardBtn_clicked();
 
+    void on_playSlider_sliderReleased();
+
+    void on_playSlider_valueChanged(int value);
+
 private:
     int pause = 0;
     QIcon* pause_icon;
     QIcon* play_icon;
     Ui::CtrlBar *ui;
+    long long now_slider_time = 0;
 };
 
 #endif // CTRLBAR_H

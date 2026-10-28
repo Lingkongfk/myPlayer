@@ -76,7 +76,9 @@ int DisplayWind::Draw(const Frame *frame)
                                  ,QImage::Format_RGB888);
         img = imageTmp.copy(0, 0, img_width, img_height);
 
-        update();
+        // update();                       ← 删掉
+        QMetaObject::invokeMethod(this, [this]() { update(); }, Qt::QueuedConnection);
+
         return 0;
 
 }

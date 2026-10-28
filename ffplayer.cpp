@@ -329,6 +329,28 @@ int FFPlayer::read_thread()
             break;
         }
 
+        //如果有seek操作
+        if(seek_req){
+            int64_t seek_max = (seek_rel < 0? seek_pos - seek_rel - 2 : INT_MAX);
+            int64_t seek_min = (seek_rel > 0? seek_pos - seek_rel + 2 : INT_MIN);
+            int64_t seek_target = seek_pos;
+
+            avformat_seek_file(ic, -1, seek_min, seek_target, seek_max, seek_flag);
+
+            if(audio_stream >= 0){
+                audioq.flush();
+                AVPacket pkt_flush{};//冲刷解码器
+                audioq.push(&pkt_flush);
+            }
+            if(video_stream >= 0){
+                videoq.flush();
+                AVPacket pkt_flush{};
+                videoq.push(&pkt_flush);
+            }
+            seek_req = 0;
+            eof = 0;
+        }
+
         ret = av_read_frame(ic, pkt);
         if(ret < 0){
             //读完了
@@ -337,19 +359,19 @@ int FFPlayer::read_thread()
             }
             if(ic->pb && ic->pb->error)
                 break;
-            //等待10ms进行结束检测
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+            std::unique_lock<std::mutex> lock(mtx);
+            continue_read_thread.wait_for(lock, std::chrono::milliseconds(10));
             continue;
         }else{
             eof = 0;
         }
 
         if(pkt->stream_index == audio_stream){
-            printf("audio ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
-
+            //printf("audio ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
             audioq.push(pkt);
         }else if(pkt->stream_index == video_stream){
-            printf("video ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
+            //printf("video ===== pkt pts:%ld, dts:%ld\n", pkt->pts/48, pkt->dts);
             videoq.push(pkt);
         }
         else{
@@ -429,7 +451,7 @@ int Decoder::decoder_decode_frame(AVFrame *frame)
 {
     int ret = AVERROR(EAGAIN);
     for(;;){
-        AVPacket pkt;
+        AVPacket pkt{};
         do{
             if(queue_->getAbort_request()){
                 return -1;
@@ -445,18 +467,19 @@ int Decoder::decoder_decode_frame(AVFrame *frame)
                 }else{
                     char errStr[256] = { 0 };
                     av_strerror(ret, errStr, sizeof(errStr));
-                    printf("audio dec:%s\n", errStr);
+                    //printf("audio dec:%s\n", errStr);
                 }
                 break;
             case AVMEDIA_TYPE_VIDEO:
                 ret = avcodec_receive_frame(avctx_, frame);
-                //printf("frame pts:%ld, dts:%ld\n", frame->pts, frame->pkt_dts);
+                printf("frame pts:%ld, dts:%ld\n", frame->pts, frame->pkt_dts);
                 if (ret >= 0) {
-                    //                    if (decoder_reorder_pts == -1) {
-                    //                        frame->pts = frame->best_effort_timestamp;
-                    //                    } else if (!decoder_reorder_pts) {
-                    //                        frame->pts = frame->pkt_dts;
-                    //                    }
+                    if (1) {
+                       frame->pts = frame->best_effort_timestamp;
+                       }
+                                       // } else if (!decoder_reorder_pts) {
+                                       //     frame->pts = frame->pkt_dts;
+                                       // }
                 } else {
 
                     char errStr[256] = { 0 };
@@ -469,7 +492,7 @@ int Decoder::decoder_decode_frame(AVFrame *frame)
 
             // 1.3. 检查解码是否已经结束，解码结束返回0
             if (ret == AVERROR_EOF) {
-                printf("avcodec_flush_buffers %s(%d)\n", __FUNCTION__, __LINE__);
+                //printf("avcodec_flush_buffers %s(%d)\n", __FUNCTION__, __LINE__);
                 avcodec_flush_buffers(avctx_);
                 return 0;
             }
@@ -523,8 +546,7 @@ int Decoder::queue_picture(FrameQueue *fq, AVFrame *src_frame, double pts, doubl
     vp->serial = serial;
     vp->pts = pts;
     vp->duration = duration;
-    //    vp->pos = pos;
-    //    vp->serial = serial;
+
 
     av_frame_move_ref(vp->frame, src_frame); // 将src中所有数据转移到dst中，并复位src。
     frame_queue_push(fq);   // 更新写索引位置
@@ -700,7 +722,7 @@ static int audio_decode_frame(FFPlayer* is){
         }
 
         if(len2 == out_count){
-            av_log(NULL, AV_LOG_WARNING, "audio buffer is probably too small\n");
+            //av_log(NULL, AV_LOG_WARNING, "audio buffer is probably too small\n");
             if (swr_init(is->swr_ctx) < 0)
                 swr_free(&is->swr_ctx);
         }
@@ -733,6 +755,7 @@ static void sdl_audio_callback(void* opaque, uint8_t* stream, int len){
     FFPlayer* is = (FFPlayer*)opaque;
     int audio_size, len1;
 
+    double sdl_callback_time = av_gettime_relative() / 1000000.0;
     //本次sdl要读取的数据量
     while(len > 0){
         //缓冲区读完了，继续进行重采样获取数据
@@ -763,12 +786,11 @@ static void sdl_audio_callback(void* opaque, uint8_t* stream, int len){
         len -= len1;
         stream += len1;
         is->audio_buf_index += len1;
-
-
     }
 
     if(!isnan(is->audio_clock)){
-        is->audclk.set_clock(is->audio_clock, is->audclk.serial);
+        int audio_write_buf_size = is->audio_buf_size - is->audio_buf_index;
+        is->audclk.set_clock_at(is->audio_clock - (double)(2 * is->audio_hw_buf_size + audio_write_buf_size) / is->audio_tgt.bytes_per_sec,sdl_callback_time, is->audclk.serial);
     }
 }
 
@@ -839,7 +861,7 @@ int FFPlayer::video_refresh_thread()
 double vp_duration(Frame* lastvp, Frame* vp){
     if(lastvp->serial == vp->serial){
         double duration = vp->pts - lastvp->pts;
-        if(isnan(duration) || duration < 0){
+        if(isnan(duration) || duration < 0 || duration > 0.1){
             return lastvp->duration;
         }else{
             return duration;
@@ -855,18 +877,33 @@ double FFPlayer::cal_now_delay(double duration){
     //获取当前时钟和同步时钟的差值
     diff = vidclk.get_clock() - get_master_clock();
 
+    std::cout << " duration=" << duration << std::endl;
     //我们最精确的差值在 0.04s也就是40ms以内就是同步，最坏100ms以内是同步
     sync_threshold = std::max(0.04, std::min(0.1, duration));
     if(!isnan(diff) && fabs(diff) < 10.0){//这里先限制一下
         if(diff <= -sync_threshold){
             //落后超过阈值，立即播放进行追赶
             duration = std::max(0.0, duration + diff);
-        }else if(diff >= sync_threshold){
+        }else if(diff >= sync_threshold && duration > 0.1){
             //视频领先等待音频
             duration = duration + diff;
+        }else if(diff >= sync_threshold){
+            duration = duration*2;
         }
     }
+    std::cout << "diff=" << diff << " delay=" << duration << std::endl;
     return duration;
+}
+
+void FFPlayer::stream_seek(int64_t seek_target, long long now)
+{
+    if(!seek_req){
+        seek_pos = seek_target * AV_TIME_BASE;
+        seek_rel = (seek_target - now) * AV_TIME_BASE;
+        seek_flag &= ~AVSEEK_FLAG_BYTE;
+        seek_req = 1;
+        continue_read_thread.notify_all();
+    }
 }
 
 void FFPlayer::video_refresh(double *remaining_time)
@@ -888,6 +925,7 @@ retry:
         lastvp = frame_queue_peek_last(&pictq);
         vp = frame_queue_peek(&pictq);  // 读取待显示帧
 
+        //qDebug() << "now serial: " << vp->serial;
         //如果seek操作，重新读帧显示
         if(vp->serial != videoq.getSerial()){
             frame_queue_next(&pictq);
@@ -909,6 +947,7 @@ retry:
         last_duration = vp_duration(lastvp, vp);
         delay = cal_now_delay(last_duration);
 
+
         //获得当前系统时间，查看是否需要继续播放一段时间
         time = av_gettime_relative() / 1000000.0;
         if(time < frame_timer + delay){
@@ -916,6 +955,7 @@ retry:
             goto display;
         }
         //如果上一帧播放落后或者正常
+
         //更新frame_timer
         frame_timer += delay;
 
@@ -998,6 +1038,7 @@ int FFPlayer::Pause()
         //当前是暂停状态，要继续播放
         frame_timer += (av_gettime_relative() / 1000000.0) - vidclk.last_updated;
         vidclk.set_clock(vidclk.get_clock(), vidclk.serial);
+        audclk.set_clock(audclk.get_clock(), audclk.serial);
     }else{
         //当前正在播放，要进行暂停
 

@@ -126,8 +126,16 @@ public:
     double cal_now_delay(double duration);
     double frame_timer = 0; //当前视频帧计时器
 
+    long long title_duration = 0;
 
-    std::atomic<long long> title_duration = 0;
+
+    std::atomic<int> seek_req = 0; //是否有seek
+    int seek_flag = 0;             //seek的标志
+    int64_t seek_pos = 0;          //目标位置
+    int64_t seek_rel = 0;          //增量
+    void stream_seek(int64_t seek_target, long long now);
+    std::condition_variable continue_read_thread;
+    std::mutex mtx;
 };
 
 //内联函数，封装消息队列的几种插入消息方法

@@ -34,6 +34,7 @@ CtrlBar::CtrlBar(QWidget *parent)
     QIcon setting_icon = QIcon(":/images/setting.png");
     ui->settingBtn->setIcon(setting_icon);
     ui->settingBtn->setText("");
+
 }
 
 CtrlBar::~CtrlBar()
@@ -45,12 +46,20 @@ void CtrlBar::set_duration(long long micr)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(micr / 1000);
     ui->totalTimeEdit->setTime(time);
+    ui->playSlider->setRange(0, micr / 1000000 + 1);//进度条范围也是秒为单位
 }
 
 void CtrlBar::set_now_position(long long micr)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(micr);
     ui->playTimeEdit->setTime(time);
+}
+
+void CtrlBar::set_now_slider(long long second)
+{
+    if(!ui->playSlider->isSliderDown()){
+        ui->playSlider->setValue(second);
+    }
 }
 
 void CtrlBar::on_playOrPauseBtn_clicked()
@@ -83,5 +92,17 @@ void CtrlBar::on_backwardBtn_clicked()
 void CtrlBar::on_forwardBtn_clicked()
 {
     emit SigForward();
+}
+
+
+void CtrlBar::on_playSlider_sliderReleased()
+{
+    emit SigSeek(now_slider_time);
+}
+
+
+void CtrlBar::on_playSlider_valueChanged(int value)
+{
+    now_slider_time = value;
 }
 

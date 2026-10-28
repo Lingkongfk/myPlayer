@@ -24,6 +24,7 @@ public:
     void OnStop();//处理暂停按钮
     void OnForward();
     void OnBackward();
+    void OnSeek(long long seek_to_time);
 
     void get_duration(long long micr);
     int outputVideo(const Frame* frame);//视频帧展示

@@ -87,16 +87,16 @@ int MyMediaPlayer::Pause()
     return ffplayer_->Pause();
 }
 
-int MyMediaPlayer::seek_to(long long msec)
+int MyMediaPlayer::seek_to(long long from, long long to)
 {
-
+    ffplayer_->stream_seek(to, from);
 }
 
 long long MyMediaPlayer::get_current_position()
 {
     //获得的是单位为秒
-    if(ffplayer_->audclk.get_clock() != NAN){
-        return (long long)(ffplayer_->audclk.get_clock() * 1000);
+    if(!isnan(ffplayer_->audclk.get_clock())){
+        return (long long)(ffplayer_->audclk.get_clock() * 1000);//返回毫秒
     }
     return 0;
 }
