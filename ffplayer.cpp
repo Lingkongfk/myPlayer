@@ -331,8 +331,8 @@ int FFPlayer::read_thread()
 
         //如果有seek操作
         if(seek_req){
-            int64_t seek_max = (seek_rel < 0? seek_pos - seek_rel - 2 : INT_MAX);
-            int64_t seek_min = (seek_rel > 0? seek_pos - seek_rel + 2 : INT_MIN);
+            int64_t seek_max = (seek_rel < 0? seek_pos - seek_rel - 2 : INT64_MAX);
+            int64_t seek_min = (seek_rel > 0? seek_pos - seek_rel + 2 : INT64_MIN);
             int64_t seek_target = seek_pos;
 
             avformat_seek_file(ic, -1, seek_min, seek_target, seek_max, seek_flag);
